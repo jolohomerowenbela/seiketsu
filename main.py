@@ -1,5 +1,5 @@
-from PyQt6.QtWidgets import QApplication
-from window import Window
+from PyQt5.QtWidgets import QApplication
+from Seiri.Window import Window
 import sys
 
 if __name__ == '__main__':
