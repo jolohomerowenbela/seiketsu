@@ -3,5 +3,4 @@ build
 dist
 Output
 main.exe
-typescript.iss
 main.spec
