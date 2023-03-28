@@ -3,5 +3,5 @@ Seiri/__pycache__
 build
 dist
 Output
-main.exe
 main.spec
+*.exe

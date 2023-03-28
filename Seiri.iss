@@ -2,15 +2,15 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Seiri"
-#define MyAppVersion "0.1"
-#define MyAppPublisher "Johowela"
-#define MyAppURL "https://github.com/jolohomerowenbela"
+#define MyAppVersion "0.2"
+#define MyAppPublisher "Johowela Inc."
+#define MyAppURL "https://github.com/jolohomerowenbela/anomagandangname"
 #define MyAppExeName "main.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{7AF09A93-F868-4C6E-BA1B-8B4DC4E7A6EA}
+AppId={{57870B80-51AE-43F4-A48E-0B1C33ACBEB4}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -23,7 +23,8 @@ DisableProgramGroupPage=yes
 LicenseFile=D:\js_basics\Apophis\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-OutputBaseFilename="{#MyAppName}-Installer"
+OutputDir=D:\js_basics\Apophis
+OutputBaseFilename=Seiri-installer
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
