@@ -1,14 +1,15 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow
-from PyQt6.QtCore import *
+from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtCore import *
 from Seiri.Window import Ui_MainWindow
+from qframelesswindow import FramelessMainWindow
 import sys
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    w = QMainWindow()
-    w.setWindowFlag(Qt.WindowType.MSWindowsFixedSizeDialogHint)
+    w = FramelessMainWindow()
     wu = Ui_MainWindow()
     wu.setupUi(w)
+    w.titleBar.raise_()
     w.show()
     
     app.exec()
