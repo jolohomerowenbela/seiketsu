@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
         font.setWeight(50)
         
         self.titleLabel = QLabel(self.centralwidget)
-        self.titleLabel.setText("Welcome To Seiri")
+        self.titleLabel.setText("Welcome To Seiketsu")
         self.titleLabel.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred))
         self.titleLabel.setFont(font)
         self.titleLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
