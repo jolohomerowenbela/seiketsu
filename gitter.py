@@ -28,17 +28,18 @@ if __name__ == '__main__':
         reader.set_value("user", "name", name)
 
     print(f"Hi {name} with email {email} !!!")
-
-    print("\n\n\nThe following files are edited but not tracked...")
-    for f in repo.untracked_files:
-        print(f)
     
-    confirmation = input("Do you want to upload them? (Yes/No) ? ")
+    if "Changes not staged" in repo.git.status():
+        print("\n\n\nThe following files are edited but not tracked...")
+        for f in repo.untracked_files:
+            print(f)
+        
+        confirmation = input("Do you want to upload them? (Yes/No) ? ")
 
-    if confirmation.upper() == "YES":
-        commit(repo)
-    else:
-        print("Stopping...")
+        if confirmation.upper() == "YES":
+            commit(repo)
+        else:
+            print("Stopping...")
     
     
     
