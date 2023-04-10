@@ -40,6 +40,8 @@ if __name__ == '__main__':
             commit(repo)
         else:
             print("Stopping...")
+    else:
+        print("You are up to date so far...")
     
     
     
