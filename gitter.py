@@ -1,6 +1,9 @@
 import git
 import os
 import datetime
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.backends import default_backend
 
 def commit(repo: git.Repo):
     branch_name = ""
@@ -16,6 +19,9 @@ def commit(repo: git.Repo):
 if __name__ == '__main__':
     dirPath = os.getcwd()
     
+    key = rsa.generate_private_key(backend=default_backend(), public_exponent=65537, key_size=2048)
+    public_key = key.public_key().public_bytes(serialization.Encoding.OpenSSH, serialization.PublicFormat.OpenSSH)
+    print(f"\n\n\nTHE KEY IS: \n{public_key.decode('utf-8')}\n\n\n")
     
     repo = git.Repo.init(dirPath)
 
