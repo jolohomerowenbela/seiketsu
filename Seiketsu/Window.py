@@ -1,7 +1,7 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from Seiri.Styles import *
+from Seiketsu.Styles import *
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow = QMainWindow):
