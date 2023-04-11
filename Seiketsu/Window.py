@@ -11,7 +11,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
         self.centralwidget.setObjectName("centralWidget")
 
-        icon = QPixmap(".\\resource\\system-file-manager.svg")
+        icon = QPixmap(".\\resource\\logo.png")
 
         self.logoIcon = QLabel(self.centralwidget)
         self.logoIcon.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred))
