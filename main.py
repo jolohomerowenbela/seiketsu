@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import *
-from Seiri.Window import Ui_MainWindow
+from Seiketsu.Window import Ui_MainWindow
 from qframelesswindow import FramelessMainWindow
 import sys
 
