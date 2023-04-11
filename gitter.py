@@ -3,8 +3,12 @@ import os
 import datetime
 
 def commit(repo: git.Repo):
-    branch_name = "branch_" + str(datetime.datetime.now()).replace(" ", "").replace("-", ".").replace(":", ".")
-    repo.git.switch("-c", branch_name)
+    branch_name = ""
+    if repo.active_branch.name == "main":
+        branch_name = "branch_" + str(datetime.datetime.now()).replace(" ", "").replace("-", ".").replace(":", ".")
+        repo.git.switch("-c", branch_name)
+    else:
+        branch_name = repo.active_branch.name
     repo.git.add(".")
     repo.git.commit("-m", input("What changes have you done? (kahit ilang words lang) "))
     repo.git.push("-u", "origin", branch_name)
@@ -29,7 +33,8 @@ if __name__ == '__main__':
 
     print(f"Hi {name} with email {email} !!!")
     
-    if "Changes not staged" in repo.git.status():
+    status = repo.git.status()
+    if "Changes not staged" in status or "Untracked files" in status:
         print("\n\n\nThe following files are edited but not tracked...")
         for f in repo.untracked_files:
             print(f)
