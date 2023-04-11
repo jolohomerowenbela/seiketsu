@@ -2,12 +2,24 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from Seiketsu.Styles import *
+from qframelesswindow import FramelessMainWindow, StandardTitleBar
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow = QMainWindow):
-        MainWindow.resize(480, 360)
+class TitleBar(StandardTitleBar):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.setStyleSheet("""
+TitleBar {
+    background-color: #007367;
+}
+""")
 
-        self.centralwidget = QWidget(MainWindow)
+class MainWindow(FramelessMainWindow):
+    def __init__(self):
+        super(MainWindow, self).__init__()
+        self.resize(480, 360)
+        self.setTitleBar(TitleBar(self))
+
+        self.centralwidget = QWidget(self)
         self.centralwidget.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
         self.centralwidget.setObjectName("centralWidget")
 
@@ -112,6 +124,6 @@ class Ui_MainWindow(object):
         self.mainLayout.addLayout(self.mainButtonsLayout)
         self.mainLayout.addLayout(self.navigationLayout)
 
-        MainWindow.setCentralWidget(self.centralwidget)
-        MainWindow.setStyleSheet(style())
-        MainWindow.setWindowTitle("Seiri")
+        self.setCentralWidget(self.centralwidget)
+        self.setStyleSheet(style())
+        self.setWindowTitle("Seiri")
