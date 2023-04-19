@@ -1,129 +1,90 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from Seiketsu.Styles import *
-from qframelesswindow import FramelessMainWindow, StandardTitleBar
+from Seiketsu.TitleBar import TitleBar
+from Seiketsu.HomePage import HomePage
 
-class TitleBar(StandardTitleBar):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.setStyleSheet("""
-TitleBar {
-    background-color: #007367;
-}
-""")
+GLOBAL_STATE = 0
 
-class MainWindow(FramelessMainWindow):
+class Window(QMainWindow):
     def __init__(self):
-        super(MainWindow, self).__init__()
-        self.resize(480, 360)
-        self.setTitleBar(TitleBar(self))
-
+        super().__init__()
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.resize(1024, 768)
+        
+        # Window drop shadow effect
+        self.shadow = QGraphicsDropShadowEffect(self)
+        self.shadow.setBlurRadius(20)
+        self.shadow.setXOffset(0)
+        self.shadow.setYOffset(0)
+        self.shadow.setColor(QColor(0, 0, 0, 100))
+        
         self.centralwidget = QWidget(self)
-        self.centralwidget.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
-        self.centralwidget.setObjectName("centralWidget")
-
-        icon = QPixmap(".\\resource\\logo.png")
-
-        self.logoIcon = QLabel(self.centralwidget)
-        self.logoIcon.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred))
-        self.logoIcon.setPixmap(icon.scaled(QSize(64, 64), Qt.AspectRatioMode.KeepAspectRatio))
-        self.logoIcon.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        font = QFont()
-        font.setFamily("Inter")
-        font.setPointSize(23)
-        font.setWeight(50)
         
-        self.titleLabel = QLabel(self.centralwidget)
-        self.titleLabel.setText("Welcome To Seiketsu")
-        self.titleLabel.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred))
-        self.titleLabel.setFont(font)
-        self.titleLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # Layout for the window
+        self.drop_shadow_layout = QVBoxLayout(self.centralwidget)
+        self.drop_shadow_layout.setContentsMargins(10, 10, 10, 10)
+
+        self.drop_shadow_frame = QFrame(self.centralwidget)
+        self.drop_shadow_frame.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(14, 154, 131, 255), stop:0.521368 rgba(0, 115, 103, 255));\n"
+"border-radius: 10px;")
+        self.drop_shadow_frame.setFrameShape(QFrame.NoFrame)
+        self.drop_shadow_frame.setFrameShadow(QFrame.Raised)
+        self.drop_shadow_frame.setGraphicsEffect(self.shadow)
         
-        font = QFont()
-        font.setFamily("Inter")
-        font.setPointSize(10)
+        # Main Layout for the widgets
+        self.verticalLayout = QVBoxLayout(self.drop_shadow_frame)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setSpacing(0)
         
-        self.subtitleLabel = QLabel(self.centralwidget)
-        self.subtitleLabel.setText("Organize your files in a simple and pragmatic way, my favorite.")
-        self.subtitleLabel.setFont(font)
-        self.subtitleLabel.setAlignment(Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignTop)
+        self.title_bar = TitleBar(self.drop_shadow_frame)
+        
+        self.home_page = HomePage(self.drop_shadow_frame)
+        
+        self.verticalLayout.addWidget(self.title_bar)
+        self.verticalLayout.addWidget(self.home_page)
 
-        font = QFont()
-        font.setFamily("Inter")
-        font.setPointSize(10)
-
-        self.organizeButton = QToolButton(self.centralwidget)
-        self.organizeButton.setText("Organize Files")
-        self.organizeButton.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
-        self.organizeButton.setFont(font)
-        self.organizeButton.setObjectName("organizeButton")
-
-        organizeIcon = QIcon()
-        organizeIcon.addPixmap(QPixmap(".\\resource\\start.svg"), QIcon.Mode.Normal, QIcon.State.Off)
-        self.organizeButton.setIcon(organizeIcon)
-        self.organizeButton.setIconSize(QSize(100, 100))
-        self.organizeButton.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
-
-        font = QFont()
-        font.setFamily("Inter")
-        font.setPointSize(10)
-
-        self.customizeButton = QToolButton(self.centralwidget)
-        self.customizeButton.setText("Customize Directories")
-        self.customizeButton.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
-        self.customizeButton.setFont(font)
-        self.customizeButton.setObjectName("customizeButton")
-
-        customizeIcon = QIcon()
-        customizeIcon.addPixmap(QPixmap(".\\resource\\setting.svg"), QIcon.Mode.Normal, QIcon.State.Off)
-        self.customizeButton.setIcon(customizeIcon)
-        self.customizeButton.setIconSize(QSize(100, 100))
-        self.customizeButton.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
-
-        font = QFont()
-        font.setFamily("Inter")
-        font.setPointSize(10)
-
-        self.closeButton = QPushButton(self.centralwidget)
-        self.closeButton.setText("Close")
-        self.closeButton.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum))
-        self.closeButton.setMinimumSize(QSize(100, 30))
-        self.closeButton.setFont(font)
-        self.closeButton.setObjectName("closeButton")
-
-        font = QFont()
-        font.setFamily("Inter")
-        font.setPointSize(10)
-
-        self.showOutputButton = QPushButton(self.centralwidget)
-        self.showOutputButton.setText("Output")
-        self.showOutputButton.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum))
-        self.showOutputButton.setMinimumSize(QSize(100, 30))
-        self.showOutputButton.setFont(font)
-        self.showOutputButton.setObjectName("showOutputButton")
-
-        self.mainButtonsLayout = QHBoxLayout()
-        self.mainButtonsLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
-        self.mainButtonsLayout.setContentsMargins(40, 20, 40, 10)
-        self.mainButtonsLayout.setSpacing(20)
-        self.mainButtonsLayout.addWidget(self.organizeButton)
-        self.mainButtonsLayout.addWidget(self.customizeButton)
-
-        self.navigationLayout = QHBoxLayout()
-        self.navigationLayout.setContentsMargins(10, 10, 10, 10)
-        self.navigationLayout.addWidget(self.closeButton, 0,Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
-        self.navigationLayout.addWidget(self.showOutputButton, 0, Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignVCenter)
-
-        self.mainLayout = QVBoxLayout(self.centralwidget)
-        self.mainLayout.setContentsMargins(-1, 10, -1, -1)
-        self.mainLayout.addWidget(self.logoIcon)
-        self.mainLayout.addWidget(self.titleLabel)
-        self.mainLayout.addWidget(self.subtitleLabel)
-        self.mainLayout.addLayout(self.mainButtonsLayout)
-        self.mainLayout.addLayout(self.navigationLayout)
-
+        self.drop_shadow_layout.addWidget(self.drop_shadow_frame)
         self.setCentralWidget(self.centralwidget)
-        self.setStyleSheet(style())
-        self.setWindowTitle("Seiri")
+        
+        self.title_bar.btn_maximize.clicked.connect(lambda: self.maximize_restore())
+        self.title_bar.btn_minimize.clicked.connect(lambda: self.showMinimized())
+        self.title_bar.btn_close.clicked.connect(lambda: self.close())
+        self.title_bar.mouseMoveEvent = self.moveWindow
+
+    def mousePressEvent(self, event):
+        self.dragPos = event.globalPos()
+
+    def moveWindow(self, event):
+        #     # RESTORE BEFORE MOVE
+        #     if UIFunctions.returnStatus() == 1:
+        #         UIFunctions.maximize_restore(self)
+
+            # IF LEFT CLICK MOVE WINDOW
+            if event.buttons() == Qt.LeftButton:
+                self.move(self.pos() + event.globalPos() - self.dragPos)
+                self.dragPos = event.globalPos()
+                event.accept()
+
+    def maximize_restore(self):
+        global GLOBAL_STATE
+        status = GLOBAL_STATE
+
+        if status == 0:
+                self.showMaximized()
+
+                # SET GLOBAL TO 1
+                GLOBAL_STATE = 1
+
+                # IF MAXIMIZED REMOVE MARGINS AND BORDER RADIUS
+                self.drop_shadow_layout.setContentsMargins(0, 0, 0, 0)
+                # self.drop_shadow_frame.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(42, 44, 111, 255), stop:0.521368 rgba(28, 29, 73, 255)); border-radius: 0px;")
+                self.title_bar.btn_maximize.setToolTip("Restore")
+        else:
+                GLOBAL_STATE = 0
+                self.showNormal()
+                self.resize(self.width()+1, self.height()+1)
+                self.drop_shadow_layout.setContentsMargins(10, 10, 10, 10)
+                # self.drop_shadow_frame.setStyleSheet("backgroundW-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(42, 44, 111, 255), stop:0.521368 rgba(28, 29, 73, 255)); border-radius: 10px;")
+                self.title_bar.btn_maximize.setToolTip("Maximize")
