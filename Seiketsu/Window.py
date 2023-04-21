@@ -27,7 +27,7 @@ class Window(QMainWindow):
         self.drop_shadow_layout.setContentsMargins(10, 10, 10, 10)
 
         self.drop_shadow_frame = QFrame(self.centralwidget)
-        self.drop_shadow_frame.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(14, 154, 131, 255), stop:0.521368 rgba(0, 115, 103, 255));\n"
+        self.drop_shadow_frame.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #4d4d4d, stop:0.521368 #666666);\n"
 "border-radius: 10px;")
         self.drop_shadow_frame.setFrameShape(QFrame.NoFrame)
         self.drop_shadow_frame.setFrameShadow(QFrame.Raised)
@@ -52,20 +52,27 @@ class Window(QMainWindow):
         self.title_bar.btn_minimize.clicked.connect(lambda: self.showMinimized())
         self.title_bar.btn_close.clicked.connect(lambda: self.close())
         self.title_bar.mouseMoveEvent = self.moveWindow
+        self.title_bar.mouseDoubleClickEvent = self.doubleClickMaximization
 
     def mousePressEvent(self, event):
         self.dragPos = event.globalPos()
+    
+    def doubleClickMaximization(self, event):
+        if event.buttons() == Qt.LeftButton:
+            self.maximize_restore()
+        
+            
 
     def moveWindow(self, event):
         #     # RESTORE BEFORE MOVE
         #     if UIFunctions.returnStatus() == 1:
         #         UIFunctions.maximize_restore(self)
 
-            # IF LEFT CLICK MOVE WINDOW
-            if event.buttons() == Qt.LeftButton:
-                self.move(self.pos() + event.globalPos() - self.dragPos)
-                self.dragPos = event.globalPos()
-                event.accept()
+        # IF LEFT CLICK MOVE WINDOW
+        if event.buttons() == Qt.LeftButton:
+            self.move(self.pos() + event.globalPos() - self.dragPos)
+            self.dragPos = event.globalPos()
+            event.accept()
 
     def maximize_restore(self):
         global GLOBAL_STATE
