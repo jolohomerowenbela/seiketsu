@@ -9,7 +9,7 @@ class SettingWidget(QWidget):
         self.grid_layout = QGridLayout(self)
         
         font = QFont()
-        font.setPointSize(11)
+        font.setPointSize(12)
         font.setFamily("Inter Medium")
         
         self.title = QLabel(self, text=setting_title)
@@ -20,7 +20,7 @@ class SettingWidget(QWidget):
         font.setPointSize(9)
         self.checkbox = QCheckBox(self, text=checkbox_title)
         self.checkbox.setStyleSheet("background: none;color: #ffffff;")
-        self.checkbox.setFixedWidth(240)
+        self.checkbox.setFixedWidth(260)
         self.checkbox.setFont(font)
         
         self.grid_layout.addWidget(self.title, 0, 0, 1, 1)

@@ -59,24 +59,25 @@ class SettingPopup(QDialog):
         font.setFamily("Inter Medium")
         
         self.icon_auto = QLabel(self.content)
-        pixmap = QPixmap(".\\resource\\customize.svg")
-        self.icon_auto.setPixmap(pixmap.scaled(QSize(84, 84), Qt.AspectRatioMode.KeepAspectRatio))
-        self.icon_auto.setStyleSheet("background: none;")
+        pixmap = QPixmap(".\\resource\\automate.svg")
+        self.icon_auto.setPixmap(pixmap.scaled(QSize(64, 64), Qt.AspectRatioMode.KeepAspectRatio))
+        self.icon_auto.setStyleSheet("background: none;border: 2px solid #9bdb4d;padding-left: 10px; padding-right: 10px;")
         
         self.setting_auto = SettingWidget(self.content, "Automatic Organization", "Set Automatic Organization.", "Organize files every:")
         self.setting_auto.add_items(["1 week", "4 hours", "12 hours", "1 day", "1 month", "3 months"], False)
         
         self.icon_func = QLabel(self.content)
-        pixmap = QPixmap(".\\resource\\customize.svg")
-        self.icon_func.setPixmap(pixmap.scaled(QSize(84, 84), Qt.AspectRatioMode.KeepAspectRatio))
+        pixmap = QPixmap(".\\resource\\function.svg")
+        self.icon_func.setPixmap(pixmap.scaled(QSize(64, 64), Qt.AspectRatioMode.KeepAspectRatio))
+        self.icon_func.setStyleSheet("background: none;border: 2px solid #9bdb4d;padding-left: 10px; padding-right: 10px;")
         
         self.setting_func = SettingWidget(self.content, "Functionality", "Rename obscure filenames.", "Organize files by:")
         self.setting_func.add_items(["Filename Analysis", "Document Analysis", "Photo Analysis"], True)
         
         self.icon_add = QLabel(self.content)
-        pixmap = QPixmap(".\\resource\\customize.svg")
-        self.icon_add.setPixmap(pixmap.scaled(QSize(84, 84), Qt.AspectRatioMode.KeepAspectRatio))
-        self.icon_add.setStyleSheet("background: none;")
+        pixmap = QPixmap(".\\resource\\quote.svg")
+        self.icon_add.setPixmap(pixmap.scaled(QSize(64, 64), Qt.AspectRatioMode.KeepAspectRatio))
+        self.icon_add.setStyleSheet("background: none;border: 2px solid #9bdb4d;padding-left: 10px; padding-right: 10px;")
         
         self.setting_add = SettingWidget(self.content, "Additional Settings", "Disable quotes on homepage.", "")
         
@@ -102,9 +103,12 @@ class SettingPopup(QDialog):
         
         self.title_bar.mouseMoveEvent = self.moveWindow
         
-        self.setConditions()
+        self.setStartupConditions()
         self.setting_auto.checkbox.stateChanged.connect(self.automatic_changed)
+        self.setting_auto.combobox.currentTextChanged.connect(self.automated_interval_changed)
         self.setting_add.checkbox.stateChanged.connect(self.quote_disable_changed)
+        self.setting_func.checkbox.stateChanged.connect(self.rename_obscure_changed)
+        self.setting_func.combobox.model().itemChanged.connect(self.methods_enabled)
 
     def close_setting(self):
         self.parent.show_settings()
@@ -112,6 +116,23 @@ class SettingPopup(QDialog):
     def mousePressEvent(self, event):
         self.dragPos = event.globalPos()
     
+    def methods_enabled(self, item: QStandardItem):
+        methods = list(Seiketsu.Settings.getMethods())
+        if item.checkState():
+            if item.text() not in methods:
+                methods.insert(item.index().row(), item.text())
+                Seiketsu.Settings.setMethods(methods)
+        else:
+            if item.text() in methods:
+                methods.remove(item.text())
+                Seiketsu.Settings.setMethods(methods)
+    
+    def rename_obscure_changed(self, value):
+        Seiketsu.Settings.setRenameObscure(bool(value))
+    
+    def automated_interval_changed(self, interval):
+        Seiketsu.Settings.setAutomatedInterval(interval)
+
     def automatic_changed(self, value):
         Seiketsu.Settings.setAutomatic(bool(value))
         if bool(value):
@@ -126,7 +147,7 @@ class SettingPopup(QDialog):
     def quote_disable_changed(self, value):
         Seiketsu.Settings.setQuotesDisabled(bool(value))
 
-    def setConditions(self):
+    def setStartupConditions(self):
         if Seiketsu.Settings.getAutomatic():
             self.setting_auto.checkbox.setChecked(True)
         else:
@@ -135,6 +156,11 @@ class SettingPopup(QDialog):
             self.setting_auto.combo_title.setStyleSheet("background: none;color: rgba(255, 255, 255, 127)")
             self.setting_auto.combobox.setStyleSheet("color: rgba(255, 255, 255, 127);border: 1px solid #666666;border-radius: 0px;")
         
+        if Seiketsu.Settings.getRenameObscure():
+            self.setting_func.checkbox.setChecked(True)
+        else:
+            self.setting_func.checkbox.setChecked(False)
+
         if Seiketsu.Settings.getQuotesDisabled():
             self.setting_add.checkbox.setChecked(True)
         else:
@@ -145,6 +171,13 @@ class SettingPopup(QDialog):
             item = self.setting_func.combobox.model().item(index, 0)
             if item.text() in methods:
                 item.setCheckState(True)
+                item.setSelectable(False)
+        
+        interval = Seiketsu.Settings.getAutomatedInterval()
+        for index in range(self.setting_auto.combobox.model().rowCount()):
+            item = self.setting_auto.combobox.model().item(index, 0)
+            if item.text() == interval:
+                self.setting_auto.combobox.setCurrentIndex(index)
                 
 
     def moveWindow(self, event):
