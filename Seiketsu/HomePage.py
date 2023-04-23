@@ -62,9 +62,7 @@ class HomePage(QFrame):
         self.button_box_layout.addWidget(self.start_button, stretch=20, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop)
         self.button_box_layout.addWidget(self.customize_button, stretch=20, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
-        self.inspiration_label = QLabel(self, text="\"You're braver than you believe, and stronger than you seem, and smarter than you think.\"")
-        self.inspiration_label.setFont(font)
-        self.inspiration_label.setObjectName("inspirational")
+        self.inspiration_label = InspirationPane(self)
         
         font.setPointSize(10)
 
@@ -73,7 +71,7 @@ class HomePage(QFrame):
         self.show_output_button.setFont(font)
         self.show_output_button.setMinimumSize(QSize(200, 40))
         
-        self.content_layout.addWidget(self.logo, stretch=20, alignment= Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop)
+        self.content_layout.addWidget(self.logo, stretch=20, alignment= Qt.AlignmentFlag.AlignCenter)
         self.content_layout.addWidget(self.app_label, stretch=15, alignment= Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.content_layout.addWidget(self.subtitle, stretch=5, alignment= Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.content_layout.addWidget(self.button_box, stretch=35)
@@ -114,14 +112,6 @@ class HomePage(QFrame):
             background: rgba(155, 219, 77, 20);
             padding-top: 20px;
             border: 3px solid #9bdb4d;
-        }
-        
-        #inspirational {
-            background:none;
-            color: #ffffff;
-            border: 2px solid #666666;
-            padding-top: 10px;
-            padding-bottom: 10px;
         }
         
         #ShowOutputButton {
