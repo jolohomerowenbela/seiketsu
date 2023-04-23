@@ -7,11 +7,7 @@ class HomePage(QFrame):
     def __init__(self, parent):
         super().__init__(parent)
         self.setObjectName(u"homepage")
-        self.setStyleSheet("#homepage {\n"
-"    background-color: #333333;\n"
-"    margin: 10px;\n"
-"    margin-top: 0px;\n"
-"}")
+        self.setStyleSheet(self.style())
         self.setFrameShape(QFrame.StyledPanel)
         self.setFrameShadow(QFrame.Raised)
         
@@ -21,7 +17,6 @@ class HomePage(QFrame):
         pixmap = QPixmap(".\\resource\\logo.svg")
         self.logo.setPixmap(pixmap.scaled(QSize(128, 128), Qt.AspectRatioMode.KeepAspectRatio))
         self.logo.setObjectName("logo")
-        self.logo.setStyleSheet("background: none;")
         
         font = QFont()
         font.setFamily("Inter ExtraBold")
@@ -30,10 +25,6 @@ class HomePage(QFrame):
         self.app_label = QLabel(self, text= "seiketsu")
         self.app_label.setFont(font)
         self.app_label.setObjectName("app_label")
-        self.app_label.setStyleSheet("#app_label {\n"
-"    background: none;\n"
-"    color: rgb(255, 255, 255);\n"
-"}")
         
         font = QFont()
         font.setFamily("Inter Medium")
@@ -42,10 +33,6 @@ class HomePage(QFrame):
         self.subtitle = QLabel(self, text = '"Streamline your files with Seiketsu - The organized way to productivity."')
         self.subtitle.setFont(font)
         self.subtitle.setObjectName("subtitle")
-        self.subtitle.setStyleSheet("#subtitle {\n"
-"   background: none;\n"
-"   color: rgb(255, 255, 255);\n"
-"}")
 
         self.button_box = QWidget(self)
         self.button_box.setStyleSheet("background: none;")
@@ -59,8 +46,7 @@ class HomePage(QFrame):
         self.start_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
         self.start_button.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
         self.start_button.setMinimumSize(QSize(250, 250))
-        self.start_button.setStyleSheet("color: #43d6b5; background: rgba(67, 214, 181, 20);padding-top: 20px;border: 3px solid #43d6b5;")
-        # "color: #43d6b5; background: none;padding-top: 20px;border: 3px solid #43d6b5;"
+        self.start_button.setObjectName("start_button")
         
         self.customize_button = QToolButton(self.button_box, text="Customize Directories")
         self.customize_button.setIcon(QIcon(".\\resource\customize-1.svg"))
@@ -69,7 +55,7 @@ class HomePage(QFrame):
         self.customize_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
         self.customize_button.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
         self.customize_button.setMinimumSize(QSize(250, 250))
-        self.customize_button.setStyleSheet("color: #9bdb4d; background: rgba(155, 219, 77, 20);padding-top: 20px;border: 3px solid #9bdb4d;")
+        self.customize_button.setObjectName("customize_button")
 
         self.button_box_layout = QHBoxLayout(self.button_box)
         self.button_box_layout.setSpacing(50)
@@ -78,14 +64,13 @@ class HomePage(QFrame):
 
         self.inspiration_label = QLabel(self, text="\"You're braver than you believe, and stronger than you seem, and smarter than you think.\"")
         self.inspiration_label.setFont(font)
-        self.inspiration_label.setStyleSheet("background:none;color: #ffffff")
+        self.inspiration_label.setObjectName("inspirational")
         
         font.setPointSize(10)
 
         self.show_output_button = QPushButton(self, text="Show Output")
         self.show_output_button.setObjectName("ShowOutputButton")
         self.show_output_button.setFont(font)
-        self.show_output_button.setStyleSheet("background-color: #64baff;color: #ffffff")
         self.show_output_button.setMinimumSize(QSize(200, 40))
         
         self.content_layout.addWidget(self.logo, stretch=20, alignment= Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop)
@@ -94,3 +79,53 @@ class HomePage(QFrame):
         self.content_layout.addWidget(self.button_box, stretch=35)
         self.content_layout.addWidget(self.inspiration_label, stretch=5, alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
         self.content_layout.addWidget(self.show_output_button, stretch=15, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+    
+    def style(self):
+        return """
+		#homepage {
+			background-color: #333333;
+			margin: 10px;
+			margin-top: 0px;
+		}
+
+        #logo {
+            background: none;
+        }
+        
+        #app_label {
+            background: none;
+            color: rgb(255, 255, 255);
+        }
+        
+        #subtitle {
+            background: none;
+            color: rgb(255, 255, 255);
+        }
+        
+        #start_button {
+            color: #43d6b5;
+            background: rgba(67, 214, 181, 20);
+            padding-top: 20px;
+            border: 3px solid #43d6b5;
+        }
+        
+        #customize_button {
+            color: #9bdb4d;
+            background: rgba(155, 219, 77, 20);
+            padding-top: 20px;
+            border: 3px solid #9bdb4d;
+        }
+        
+        #inspirational {
+            background:none;
+            color: #ffffff;
+            border: 2px solid #666666;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        
+        #ShowOutputButton {
+            background-color: #64baff;
+            color: #ffffff;
+        }
+    	"""

@@ -1,7 +1,7 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from Seiketsu.TitleBar import TitleBar
+from Seiketsu.Titlebar import TitleBar
 from Seiketsu.HomePage import HomePage
 
 GLOBAL_STATE = 0
@@ -38,7 +38,7 @@ class Window(QMainWindow):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
         
-        self.title_bar = TitleBar(self.drop_shadow_frame)
+        self.title_bar = TitleBar(self.drop_shadow_frame, has_settings=True, has_minimize=True, has_maximize=True)
         
         self.home_page = HomePage(self.drop_shadow_frame)
         
@@ -60,14 +60,8 @@ class Window(QMainWindow):
     def doubleClickMaximization(self, event):
         if event.buttons() == Qt.LeftButton:
             self.maximize_restore()
-        
-            
 
     def moveWindow(self, event):
-        #     # RESTORE BEFORE MOVE
-        #     if UIFunctions.returnStatus() == 1:
-        #         UIFunctions.maximize_restore(self)
-
         # IF LEFT CLICK MOVE WINDOW
         if event.buttons() == Qt.LeftButton:
             self.move(self.pos() + event.globalPos() - self.dragPos)
@@ -86,12 +80,10 @@ class Window(QMainWindow):
 
                 # IF MAXIMIZED REMOVE MARGINS AND BORDER RADIUS
                 self.drop_shadow_layout.setContentsMargins(0, 0, 0, 0)
-                # self.drop_shadow_frame.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(42, 44, 111, 255), stop:0.521368 rgba(28, 29, 73, 255)); border-radius: 0px;")
                 self.title_bar.btn_maximize.setToolTip("Restore")
         else:
                 GLOBAL_STATE = 0
                 self.showNormal()
                 self.resize(self.width()+1, self.height()+1)
                 self.drop_shadow_layout.setContentsMargins(10, 10, 10, 10)
-                # self.drop_shadow_frame.setStyleSheet("backgroundW-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(42, 44, 111, 255), stop:0.521368 rgba(28, 29, 73, 255)); border-radius: 10px;")
                 self.title_bar.btn_maximize.setToolTip("Maximize")
