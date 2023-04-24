@@ -1,7 +1,9 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+from Seiketsu.SettingWidget import SettingWidget
 import Seiketsu.Titlebar
+import Seiketsu.Settings
 
 class SettingPopup(QDialog):
     def __init__(self, parent, clicker_button):
@@ -62,14 +64,14 @@ class SettingPopup(QDialog):
         self.icon_auto.setStyleSheet("background: none;")
         
         self.setting_auto = SettingWidget(self.content, "Automatic Organization", "Set Automatic Organization.", "Organize files every:")
-        self.setting_auto.add_combo_item("1 hour")
+        self.setting_auto.add_items(["1 week", "4 hours", "12 hours", "1 day", "1 month", "3 months"], False)
         
         self.icon_func = QLabel(self.content)
         pixmap = QPixmap(".\\resource\\customize.svg")
         self.icon_func.setPixmap(pixmap.scaled(QSize(84, 84), Qt.AspectRatioMode.KeepAspectRatio))
         
         self.setting_func = SettingWidget(self.content, "Functionality", "Rename obscure filenames.", "Organize files by:")
-        self.setting_func.add_combo_item("Document Analysis")
+        self.setting_func.add_items(["Filename Analysis", "Document Analysis", "Photo Analysis"], True)
         
         self.icon_add = QLabel(self.content)
         pixmap = QPixmap(".\\resource\\customize.svg")
@@ -99,12 +101,51 @@ class SettingPopup(QDialog):
         self.title_bar.button_box.setAlignment(self.title_bar.btn_close, Qt.AlignmentFlag.AlignRight)
         
         self.title_bar.mouseMoveEvent = self.moveWindow
+        
+        self.setConditions()
+        self.setting_auto.checkbox.stateChanged.connect(self.automatic_changed)
+        self.setting_add.checkbox.stateChanged.connect(self.quote_disable_changed)
 
     def close_setting(self):
         self.parent.show_settings()
     
     def mousePressEvent(self, event):
         self.dragPos = event.globalPos()
+    
+    def automatic_changed(self, value):
+        Seiketsu.Settings.setAutomatic(bool(value))
+        if bool(value):
+            self.setting_auto.combobox.setEnabled(True)
+            self.setting_auto.combo_title.setStyleSheet("background: none; color: #ffffff;")
+            self.setting_auto.combobox.setStyleSheet("color: #ffffff; border: 1px solid #666666;border-radius: 0px;")
+        else:
+            self.setting_auto.combobox.setEnabled(False)
+            self.setting_auto.combo_title.setStyleSheet("background: none;color: rgba(255, 255, 255, 127)")
+            self.setting_auto.combobox.setStyleSheet("color: rgba(255, 255, 255, 127);border: 1px solid #666666;border-radius: 0px;")
+    
+    def quote_disable_changed(self, value):
+        Seiketsu.Settings.setQuotesDisabled(bool(value))
+
+    def setConditions(self):
+        if Seiketsu.Settings.getAutomatic():
+            self.setting_auto.checkbox.setChecked(True)
+        else:
+            self.setting_auto.checkbox.setChecked(False)
+            self.setting_auto.combobox.setEnabled(False)
+            self.setting_auto.combo_title.setStyleSheet("background: none;color: rgba(255, 255, 255, 127)")
+            self.setting_auto.combobox.setStyleSheet("color: rgba(255, 255, 255, 127);border: 1px solid #666666;border-radius: 0px;")
+        
+        if Seiketsu.Settings.getQuotesDisabled():
+            self.setting_add.checkbox.setChecked(True)
+        else:
+            self.setting_add.checkbox.setChecked(False)
+        
+        methods = Seiketsu.Settings.getMethods()
+        for index in range(self.setting_func.combobox.model().rowCount()):
+            item = self.setting_func.combobox.model().item(index, 0)
+            if item.text() in methods:
+                item.setCheckState(True)
+                
 
     def moveWindow(self, event):
         # IF LEFT CLICK MOVE WINDOW
@@ -112,46 +153,3 @@ class SettingPopup(QDialog):
             self.move(self.pos() + event.globalPos() - self.dragPos)
             self.dragPos = event.globalPos()
             event.accept()
-        
-class SettingWidget(QWidget):
-    def __init__(self, parent, setting_title: str, checkbox_title: str, combobox_label: str):
-        super().__init__(parent)
-        
-        self.grid_layout = QGridLayout(self)
-        
-        font = QFont()
-        font.setPointSize(11)
-        font.setFamily("Inter Medium")
-        
-        self.title = QLabel(self, text=setting_title)
-        self.title.setStyleSheet("background: none;color: #ffffff;")
-        self.title.setFont(font)
-        
-        font.setFamily("Inter Regular")
-        font.setPointSize(9)
-        self.checkbox = QCheckBox(self, text=checkbox_title)
-        self.checkbox.setStyleSheet("background: none;color: #ffffff;")
-        self.checkbox.setFixedWidth(240)
-        self.checkbox.setFont(font)
-        
-        self.grid_layout.addWidget(self.title, 0, 0, 1, 1)
-        self.grid_layout.addWidget(self.checkbox, 1, 0, 1, 1)
-        
-        if combobox_label != "":
-            self.combo_title = QLabel(self, text=combobox_label)
-            self.combo_title.setStyleSheet("background: none; color: #ffffff;")
-            self.combo_title.setFont(font)
-            self.combo_title.setFixedWidth(160)
-            
-            self.interval_combobox = QComboBox(self)
-            self.interval_combobox.setFixedWidth(200)
-            self.interval_combobox.setStyleSheet("color: #ffffff; border: 1px solid #666666;border-radius: 0px;")
-            self.interval_combobox.setFont(font)
-            
-            self.grid_layout.addWidget(self.combo_title, 1, 1, 1, 1, alignment=Qt.AlignmentFlag.AlignRight)
-            self.grid_layout.addWidget(self.interval_combobox, 1, 2, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
-    
-    def add_combo_item(self, item: str):
-        if self.interval_combobox is not None:
-            self.interval_combobox.addItem(item)
-        

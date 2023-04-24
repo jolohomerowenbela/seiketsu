@@ -3,6 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from Seiketsu.Titlebar import TitleBar
 from Seiketsu.HomePage import HomePage
+import Seiketsu.Settings
 
 GLOBAL_STATE = 0
 
@@ -12,6 +13,8 @@ class Window(QMainWindow):
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.resize(1024, 768)
+        
+        setting = Seiketsu.Settings.init()
         
         # Window drop shadow effect
         self.shadow = QGraphicsDropShadowEffect(self)
