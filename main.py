@@ -1,11 +1,11 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import *
-from Seiketsu.Window import Window
+from Seiketsu.Window import MainWindow
 import sys
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    wu = Window()
-    wu.show()
+    window = MainWindow()
+    window.show()
     
     app.exec()

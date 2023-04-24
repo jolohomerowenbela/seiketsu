@@ -33,10 +33,11 @@ class TitleBar(QFrame):
         
         pixmap = QPixmap(".\\resource\\icon.svg")
         
-        self.icon = QLabel(self.frame_title)
+        self.icon = QPushButton(self.frame_title)
         sizePolicy.setHeightForWidth(self.icon.sizePolicy().hasHeightForWidth())
         self.icon.setSizePolicy(sizePolicy)
-        self.icon.setPixmap(pixmap.scaled(QSize(48, 48), Qt.AspectRatioMode.KeepAspectRatio))
+        self.icon.setIcon(QIcon(pixmap))
+        self.icon.setIconSize(QSize(48, 48))
         self.icon.setObjectName("icon")
         
         self.horizontalLayout_2 = QHBoxLayout(self.frame_title)
