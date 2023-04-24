@@ -48,6 +48,19 @@ class HomePage(QFrame):
         self.start_button.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
         self.start_button.setMinimumSize(QSize(250, 250))
         self.start_button.setObjectName("start_button")
+        self.start_button.setStyleSheet("""
+        #start_button {
+        color: #43d6b5;
+        background: rgba(67, 214, 181, 20);
+        padding-top: 20px;
+        border: 3px solid #43d6b5;
+        }
+        #start_button:hover {
+        color: #43d6b5;
+        background: rgba(67, 214, 181, 50%);
+        padding-top: 20px;
+        border: 3px solid #43d6b5;
+        }""")
         
         self.customize_button = QToolButton(self.button_box, text="Customize Directories")
         self.customize_button.setIcon(QIcon(".\\resource\customize-1.svg"))
@@ -57,6 +70,19 @@ class HomePage(QFrame):
         self.customize_button.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
         self.customize_button.setMinimumSize(QSize(250, 250))
         self.customize_button.setObjectName("customize_button")
+        self.customize_button.setStyleSheet("""
+        #customize_button {
+        color: #9bdb4d;
+        background: rgba(155, 219, 77, 20);
+        padding-top: 20px;
+        border: 3px solid #9bdb4d;
+        }
+        #customize_button:hover {
+        color: #9bdb4d;
+        background: rgba(155, 219, 77, 50%);
+        padding-top: 20px;
+        border: 3px solid #9bdb4d;
+        }""")
 
         self.button_box_layout = QHBoxLayout(self.button_box)
         self.button_box_layout.setSpacing(50)
@@ -79,6 +105,7 @@ class HomePage(QFrame):
         self.content_layout.addWidget(self.inspiration_label, stretch=5, alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
         self.content_layout.addWidget(self.show_output_button, stretch=15, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         
+        self.start_button.clicked.connect(self.show_outputview)
         self.show_output_button.clicked.connect(self.show_outputview)
     
     def show_outputview(self):
@@ -89,9 +116,21 @@ class HomePage(QFrame):
         self.window.stackedWidget.slideToNextWidget()
         self.window.title_bar.icon.setIcon(QIcon(pixmap))
         self.window.title_bar.icon.setIconSize(QSize(24, 24))
-        self.window.title_bar.icon.setStyleSheet("border: 2px solid #9bdb4d;margin-top: 5px; margin-bottom: 5px;background-color: rgba(155, 219, 77, 20)")
         self.window.title_bar.label_title.setText("Return to Home Page")
         self.window.title_bar.label_title.setFont(font)
+        self.window.title_bar.icon.setStyleSheet("""
+        QPushButton {
+            border: 2px solid #9bdb4d;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            background-color: rgba(155, 219, 77, 20);
+        }
+        QPushButton:hover {
+            border: 2px solid #9bdb4d;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            background-color: rgba(155, 219, 77, 50%);
+        }""")
     
     def style(self):
         return """
