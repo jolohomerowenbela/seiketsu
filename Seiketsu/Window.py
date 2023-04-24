@@ -3,11 +3,13 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from Seiketsu.Titlebar import TitleBar
 from Seiketsu.HomePage import HomePage
+from Seiketsu.OutputView import OutputView
+from Custom_Widgets.Widgets import QCustomStackedWidget
 import Seiketsu.Settings
 
 GLOBAL_STATE = 0
 
-class Window(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
@@ -43,10 +45,20 @@ class Window(QMainWindow):
         
         self.title_bar = TitleBar(self.drop_shadow_frame, has_settings=True, has_minimize=True, has_maximize=True)
         
-        self.home_page = HomePage(self.drop_shadow_frame)
+        self.stackedWidget = QCustomStackedWidget(self.drop_shadow_frame)
+        self.stackedWidget.setTransitionDirection(Qt.Horizontal)
+        self.stackedWidget.setTransitionSpeed(250)
+        self.stackedWidget.setTransitionEasingCurve(QEasingCurve.Linear)
+        self.stackedWidget.setSlideTransition(True)
+        
+        self.home_page = HomePage(self.stackedWidget, self)
+        self.outputview = OutputView(self.stackedWidget)
+        
+        self.stackedWidget.addWidget(self.home_page)
+        self.stackedWidget.addWidget(self.outputview)
         
         self.verticalLayout.addWidget(self.title_bar)
-        self.verticalLayout.addWidget(self.home_page)
+        self.verticalLayout.addWidget(self.stackedWidget)
 
         self.drop_shadow_layout.addWidget(self.drop_shadow_frame)
         self.setCentralWidget(self.centralwidget)
@@ -56,6 +68,20 @@ class Window(QMainWindow):
         self.title_bar.btn_close.clicked.connect(lambda: self.close())
         self.title_bar.mouseMoveEvent = self.moveWindow
         self.title_bar.mouseDoubleClickEvent = self.doubleClickMaximization
+        self.title_bar.icon.clicked.connect(self.return_to_homepage)
+    
+    def return_to_homepage(self):
+        if self.stackedWidget.currentIndex() == 1:
+            pixmap = QPixmap(".\\resource\\icon.svg")
+            font = self.title_bar.label_title.font()
+            font.setPointSize(14)
+
+            self.stackedWidget.slideToPreviousWidget()
+            self.title_bar.icon.setIcon(QIcon(pixmap))
+            self.title_bar.icon.setIconSize(QSize(48, 48))
+            self.title_bar.icon.setStyleSheet("")
+            self.title_bar.label_title.setText("Seiketsu")
+            self.title_bar.label_title.setFont(font)
 
     def mousePressEvent(self, event):
         self.dragPos = event.globalPos()

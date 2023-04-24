@@ -4,8 +4,9 @@ from PyQt5.QtWidgets import *
 from Seiketsu.InspirationPane import *
 
 class HomePage(QFrame):
-    def __init__(self, parent):
+    def __init__(self, parent, main):
         super().__init__(parent)
+        self.window = main
         self.setObjectName(u"homepage")
         self.setStyleSheet(self.style())
         self.setFrameShape(QFrame.StyledPanel)
@@ -77,6 +78,20 @@ class HomePage(QFrame):
         self.content_layout.addWidget(self.button_box, stretch=35)
         self.content_layout.addWidget(self.inspiration_label, stretch=5, alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
         self.content_layout.addWidget(self.show_output_button, stretch=15, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        
+        self.show_output_button.clicked.connect(self.show_outputview)
+    
+    def show_outputview(self):
+        pixmap = QPixmap(".\\resource\\return.svg")
+        font = self.window.title_bar.font()
+        font.setPointSize(11)
+        
+        self.window.stackedWidget.slideToNextWidget()
+        self.window.title_bar.icon.setIcon(QIcon(pixmap))
+        self.window.title_bar.icon.setIconSize(QSize(24, 24))
+        self.window.title_bar.icon.setStyleSheet("border: 2px solid #9bdb4d;margin-top: 5px; margin-bottom: 5px;background-color: rgba(155, 219, 77, 20)")
+        self.window.title_bar.label_title.setText("Return to Home Page")
+        self.window.title_bar.label_title.setFont(font)
     
     def style(self):
         return """
