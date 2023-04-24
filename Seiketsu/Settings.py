@@ -8,10 +8,24 @@ def init():
     if "organization_methods" not in settings.allKeys():
         settings.setValue("organization_methods", ["Filename Analysis"])
     
+    if "rename_obscure" not in settings.allKeys():
+        settings.setValue("rename_obscure", False)
+    
     if "disable_quotes" not in settings.allKeys():
         settings.setValue("disable_quotes", False)
     
+    if "interval" not in settings.allKeys():
+        settings.setValue("interval", "1 week")
+    
     return settings
+
+def getAutomatedInterval():
+    settings = QSettings("JYOH Software Solutions", "Seiketsu")
+    return settings.value("interval", defaultValue="1 week", type=str)
+
+def setAutomatedInterval(interval: str):
+    settings = QSettings("JYOH Software Solutions", "Seiketsu")
+    settings.setValue("interval", interval)
 
 def getAutomatic():
     settings = QSettings("JYOH Software Solutions", "Seiketsu")
@@ -28,6 +42,14 @@ def getMethods():
 def setMethods(methods: list[str]):
     settings = QSettings("JYOH Software Solutions", "Seiketsu")
     settings.setValue("organization_methods", methods)
+
+def getRenameObscure():
+    settings = QSettings("JYOH Software Solutions", "Seiketsu")
+    return settings.value("rename_obscure", defaultValue=False, type=bool)
+
+def setRenameObscure(boolean: bool):
+    settings = QSettings("JYOH Software Solutions", "Seiketsu")
+    settings.setValue("rename_obscure", boolean)
 
 def getQuotesDisabled():
     settings = QSettings("JYOH Software Solutions", "Seiketsu")
