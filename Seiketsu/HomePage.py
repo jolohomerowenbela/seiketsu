@@ -2,6 +2,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from Seiketsu.InspirationPane import *
+from Seiketsu.CustomizerWindow import *
 
 class HomePage(QFrame):
     def __init__(self, parent, main):
@@ -62,6 +63,8 @@ class HomePage(QFrame):
         border: 3px solid #43d6b5;
         }""")
         
+        self.customize_window = CustomizerWindow(self)
+        
         self.customize_button = QToolButton(self.button_box, text="Customize Directories")
         self.customize_button.setIcon(QIcon(".\\resource\customize-1.svg"))
         self.customize_button.setIconSize(QSize(150, 150))
@@ -83,6 +86,7 @@ class HomePage(QFrame):
         padding-top: 20px;
         border: 3px solid #9bdb4d;
         }""")
+        self.customize_button.clicked.connect(lambda: self.customize_window.show())
 
         self.button_box_layout = QHBoxLayout(self.button_box)
         self.button_box_layout.setSpacing(50)
@@ -97,12 +101,23 @@ class HomePage(QFrame):
         self.show_output_button.setObjectName("ShowOutputButton")
         self.show_output_button.setFont(font)
         self.show_output_button.setMinimumSize(QSize(200, 40))
+        self.show_output_button.setStyleSheet("""
+        #ShowOutputButton {
+            background-color: rgba(100, 185, 255, 20);
+            color: #ffffff;
+            border: 2px solid #64baff;
+        }
+        #ShowOutputButton:hover {
+            background-color: rgba(100, 185, 255, 50%);
+            color: #ffffff;
+            border: 2px solid #64baff;
+        }""")
         
         self.content_layout.addWidget(self.logo, stretch=20, alignment= Qt.AlignmentFlag.AlignCenter)
         self.content_layout.addWidget(self.app_label, stretch=15, alignment= Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.content_layout.addWidget(self.subtitle, stretch=5, alignment= Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.content_layout.addWidget(self.button_box, stretch=35)
-        self.content_layout.addWidget(self.inspiration_label, stretch=5, alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
+        self.content_layout.addWidget(self.inspiration_label, stretch=5)
         self.content_layout.addWidget(self.show_output_button, stretch=15, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         
         self.start_button.clicked.connect(self.show_outputview)

@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import *
 from Seiketsu.SettingPopup import SettingPopup
 
 class TitleBar(QFrame):
-    def __init__(self, parent, has_settings, has_minimize, has_maximize):
+    def __init__(self, parent, has_settings, has_minimize, has_maximize, label:str):
         super().__init__(parent)
         self.settings = None
 
@@ -49,7 +49,7 @@ class TitleBar(QFrame):
 
         self.label_title = QLabel(self.frame_title)
         self.label_title.setSizePolicy(sizePolicy)
-        self.label_title.setText("Seiketsu")
+        self.label_title.setText(label)
 
         font = QFont()
         font.setFamily("Inter")
