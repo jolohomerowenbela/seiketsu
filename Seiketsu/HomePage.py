@@ -3,6 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from Seiketsu.InspirationPane import *
 from Seiketsu.CustomizerWindow import *
+import Seiketsu.Settings
 
 class HomePage(QFrame):
     def __init__(self, parent, main):
@@ -120,9 +121,12 @@ class HomePage(QFrame):
         self.content_layout.addWidget(self.inspiration_label, stretch=5)
         self.content_layout.addWidget(self.show_output_button, stretch=15, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         
-        self.start_button.clicked.connect(self.show_outputview)
+        self.start_button.clicked.connect(self.organize_files)
         self.show_output_button.clicked.connect(self.show_outputview)
     
+    def organize_files(self):
+        pass #ready na guys!!!
+        
     def show_outputview(self):
         pixmap = QPixmap(".\\resource\\return.svg")
         font = self.window.title_bar.font()
