@@ -2,6 +2,9 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from Seiketsu.InspirationPane import *
+from Seiketsu.CustomizerWindow import *
+from Seiketsu.Organizer import Organizer
+import Seiketsu.Settings
 
 class HomePage(QFrame):
     def __init__(self, parent, main):
@@ -50,17 +53,19 @@ class HomePage(QFrame):
         self.start_button.setObjectName("start_button")
         self.start_button.setStyleSheet("""
         #start_button {
-        color: #43d6b5;
-        background: rgba(67, 214, 181, 20);
-        padding-top: 20px;
-        border: 3px solid #43d6b5;
+            color: #43d6b5;
+            background: rgba(67, 214, 181, 20);
+            padding-top: 20px;
+            border: 3px solid #43d6b5;
         }
         #start_button:hover {
-        color: #43d6b5;
-        background: rgba(67, 214, 181, 50%);
-        padding-top: 20px;
-        border: 3px solid #43d6b5;
+            color: #43d6b5;
+            background: rgba(67, 214, 181, 50%);
+            padding-top: 20px;
+            border: 3px solid #43d6b5;
         }""")
+        
+        self.customize_window = CustomizerWindow(self)
         
         self.customize_button = QToolButton(self.button_box, text="Customize Directories")
         self.customize_button.setIcon(QIcon(".\\resource\customize-1.svg"))
@@ -72,17 +77,18 @@ class HomePage(QFrame):
         self.customize_button.setObjectName("customize_button")
         self.customize_button.setStyleSheet("""
         #customize_button {
-        color: #9bdb4d;
-        background: rgba(155, 219, 77, 20);
-        padding-top: 20px;
-        border: 3px solid #9bdb4d;
+            color: #9bdb4d;
+            background: rgba(155, 219, 77, 20);
+            padding-top: 20px;
+            border: 3px solid #9bdb4d;
         }
         #customize_button:hover {
-        color: #9bdb4d;
-        background: rgba(155, 219, 77, 50%);
-        padding-top: 20px;
-        border: 3px solid #9bdb4d;
+            color: #9bdb4d;
+            background: rgba(155, 219, 77, 50%);
+            padding-top: 20px;
+            border: 3px solid #9bdb4d;
         }""")
+        self.customize_button.clicked.connect(lambda: self.customize_window.show())
 
         self.button_box_layout = QHBoxLayout(self.button_box)
         self.button_box_layout.setSpacing(50)
@@ -97,23 +103,38 @@ class HomePage(QFrame):
         self.show_output_button.setObjectName("ShowOutputButton")
         self.show_output_button.setFont(font)
         self.show_output_button.setMinimumSize(QSize(200, 40))
+        self.show_output_button.setStyleSheet("""
+        #ShowOutputButton {
+            background-color: rgba(100, 185, 255, 20);
+            color: #ffffff;
+            border: 2px solid #64baff;
+        }
+        #ShowOutputButton:hover {
+            background-color: rgba(100, 185, 255, 50%);
+            color: #ffffff;
+            border: 2px solid #64baff;
+        }""")
         
         self.content_layout.addWidget(self.logo, stretch=20, alignment= Qt.AlignmentFlag.AlignCenter)
         self.content_layout.addWidget(self.app_label, stretch=15, alignment= Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.content_layout.addWidget(self.subtitle, stretch=5, alignment= Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.content_layout.addWidget(self.button_box, stretch=35)
-        self.content_layout.addWidget(self.inspiration_label, stretch=5, alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
+        self.content_layout.addWidget(self.inspiration_label, stretch=5)
         self.content_layout.addWidget(self.show_output_button, stretch=15, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         
-        self.start_button.clicked.connect(self.show_outputview)
+        self.start_button.clicked.connect(self.organize_files)
         self.show_output_button.clicked.connect(self.show_outputview)
     
+    def organize_files(self):
+        self.organizer = Organizer()
+        self.show_outputview()
+        self.organizer.organize(Seiketsu.Settings.getScannableFolders(), self.window.outputview)
+        
     def show_outputview(self):
         pixmap = QPixmap(".\\resource\\return.svg")
         font = self.window.title_bar.font()
         font.setPointSize(11)
         
-        self.window.stackedWidget.slideToNextWidget()
         self.window.title_bar.icon.setIcon(QIcon(pixmap))
         self.window.title_bar.icon.setIconSize(QSize(24, 24))
         self.window.title_bar.label_title.setText("Return to Home Page")
@@ -131,6 +152,8 @@ class HomePage(QFrame):
             margin-bottom: 5px;
             background-color: rgba(155, 219, 77, 50%);
         }""")
+        
+        self.window.stackedWidget.slideToNextWidget()
     
     def style(self):
         return """

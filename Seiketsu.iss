@@ -2,15 +2,15 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Seiketsu"
-#define MyAppVersion "0.2"
-#define MyAppPublisher "Johowela Inc."
-#define MyAppURL "https://github.com/jolohomerowenbela/anomagandangname"
+#define MyAppVersion "0.6"
+#define MyAppPublisher "JYOH Software Solutions"
+#define MyAppURL "https://github.com/jolohomerowenbela/seiketsu"
 #define MyAppExeName "main.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{57870B80-51AE-43F4-A48E-0B1C33ACBEB4}
+AppId={{90ABF647-5568-40E9-8757-B9E777A195D0}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -20,11 +20,12 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile=D:\js_basics\Apophis\LICENSE
+LicenseFile=C:\Users\owend\OneDrive\Desktop\seiketsu\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-OutputDir=D:\js_basics\Apophis
-OutputBaseFilename=Seiri-installer
+OutputDir=C:\Users\owend\OneDrive\Desktop\seiketsu\dist
+OutputBaseFilename=Seiketsu-Installer
+SetupIconFile=C:\Users\owend\OneDrive\Desktop\seiketsu\resource\logo.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -36,8 +37,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\js_basics\Apophis\dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\js_basics\Apophis\resource\*"; DestDir: "{app}\resource"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\owend\OneDrive\Desktop\seiketsu\dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\owend\OneDrive\Desktop\seiketsu\resource\*"; DestDir: "{app}\resource"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
