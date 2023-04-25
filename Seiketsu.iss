@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Seiketsu"
-#define MyAppVersion "0.3"
+#define MyAppVersion "0.6"
 #define MyAppPublisher "JYOH Software Solutions"
 #define MyAppURL "https://github.com/jolohomerowenbela/seiketsu"
 #define MyAppExeName "main.exe"
