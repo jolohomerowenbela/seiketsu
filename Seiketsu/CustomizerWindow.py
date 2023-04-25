@@ -2,6 +2,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import Seiketsu.Titlebar
+import Seiketsu.Settings
 from Seiketsu.CustomScrollableTable import *
 
 class CustomizerWindow(QDialog):
@@ -44,14 +45,59 @@ class CustomizerWindow(QDialog):
         self.content.setStyleSheet("background-color: #333333;margin-left: 10px;margin-bottom: 10px;margin-right: 10px;")
         self.content_layout = QVBoxLayout(self.content)
         
-        self.table = CustomScrollableTable(self.content)
+        self.table = CustomScrollableTable(self.content, has_checkbox=True)
         self.table.gridLayout.setSpacing(0)
+        self.table.setFixedHeight(420)
         self.table.setHeaders(["Folders"])
         
-        for r in range(30):
-            self.table.append([f"Folder named {r}"])
-
-        self.content_layout.addWidget(self.table)        
+        self.folderpaths = list(Seiketsu.Settings.getScannableFolders())
+        for folder in self.folderpaths:
+            self.table.append([folder])
+            
+        font = QFont()
+        font.setFamily("Inter Regular")
+        font.setPointSize(10)
+        
+        self.add_button = QPushButton(parent=self.content, text="Add Folder")
+        self.add_button.setFixedHeight(50)
+        self.add_button.setFont(font)
+        self.add_button.setStyleSheet("""
+        QPushButton {
+            color: #ffffff;
+            background: rgba(249, 196, 64, 20);
+            border: 3px solid #f9c440;
+        }
+        QPushButton:hover {
+            color: #ffffff;
+            background: rgba(249, 196, 64, 50%);
+            border: 3px solid #f9c440;
+        }""")
+        self.add_button.clicked.connect(self.add_to_folders)
+        
+        self.remove_button = QPushButton(parent=self.content, text="Remove Folder")
+        self.remove_button.setFixedHeight(50)
+        self.remove_button.setFont(font)
+        self.remove_button.setStyleSheet("""
+        QPushButton {
+            color: #ffffff;
+            background: rgba(243, 115, 41, 20);
+            border: 3px solid #f37329;
+        }
+        QPushButton:hover {
+            color: #ffffff;
+            background: rgba(243, 115, 41, 50%);
+            border: 3px solid #f37329;
+        }""")
+        self.remove_button.clicked.connect(self.remove_selected)
+        
+        self.buttons = QWidget(self.content)
+        
+        self.buttons_layout = QHBoxLayout(self.buttons)
+        self.buttons_layout.addWidget(self.add_button)
+        self.buttons_layout.addWidget(self.remove_button)
+        
+        self.content_layout.addWidget(self.table)
+        self.content_layout.addWidget(self.buttons)   
         
         font.setPointSize(11)
         font.setFamily("Inter Medium")
@@ -75,3 +121,21 @@ class CustomizerWindow(QDialog):
     
     def mousePressEvent(self, event):
         self.dragPos = event.globalPos()
+        
+    def remove_selected(self):
+        if self.table.selectedBoxes is not None and len(self.table.selectedBoxes) > 0:
+            for row in self.table.selectedBoxes:
+                self.folderpaths.remove(self.table.gridLayout.itemAtPosition(row, 0).widget().text())
+                self.table.selectedBoxes.remove(row)
+                for col in range(self.table.gridLayout.columnCount()):
+                    self.table.gridLayout.itemAtPosition(row, col).widget().setParent(None)
+                Seiketsu.Settings.setScannableFolders(self.folderpaths)
+    
+    def add_to_folders(self):
+        folderpath = QFileDialog.getExistingDirectory(self, 'Select Folder')
+        if folderpath not in self.folderpaths:
+            self.folderpaths.append(folderpath)
+            self.table.append([folderpath])
+            Seiketsu.Settings.setScannableFolders(self.folderpaths)
+        else:
+            print("Already here")

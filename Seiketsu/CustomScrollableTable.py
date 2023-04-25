@@ -3,8 +3,11 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
 class CustomScrollableTable(QFrame):
-    def __init__(self, parent):
+    def __init__(self, parent, has_checkbox=False):
         super().__init__(parent)
+        self.checkboxes = []
+        self.selectedBoxes = []
+        self.has_checkbox = has_checkbox
         self.setStyleSheet("background:none;background-color:#666666;")
         self.layout = QHBoxLayout(self)
         self.setFrameShape(QFrame.StyledPanel)
@@ -16,6 +19,7 @@ class CustomScrollableTable(QFrame):
         self.gridLayout = QGridLayout(self.scrollAreaWidgetContents)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.layout.addWidget(self.scrollArea)
+        
         self.font = QFont()
         self.font.setFamily("Inter Regular")
         self.font.setPointSize(10)
@@ -63,20 +67,34 @@ class CustomScrollableTable(QFrame):
     
     def append(self, row: list[str]):
         current_index = self.gridLayout.rowCount()
+
+        for index,column in enumerate(row):
+            label = QLabel(column)
+            label.setFont(self.font)
+            label.setStyleSheet("color: #ffffff;background:none;background-color: #333333;border-radius: 2px;padding: 5px;qproperty-alignment: AlignCenter;")
+            label.setFixedHeight(40)
+            self.gridLayout.addWidget(label, current_index, index)
         
-        if len(row) > self.gridLayout.columnCount():
-            print("Adding more than what have headers!")
-        else:
-            for index,column in enumerate(row):
-                label = QLabel(column)
-                label.setFont(self.font)
-                label.setStyleSheet("color: #ffffff;background:none;background-color: #333333;border-radius: 2px;padding: 5px;qproperty-alignment: AlignCenter;")
-                label.setFixedHeight(40)
-                self.gridLayout.addWidget(label, current_index, index)
+        if self.has_checkbox:
+            checkbox = QCheckBox(self.scrollArea)
+            checkbox.row = current_index
+            self.checkboxes.insert(current_index, checkbox)
+            checkbox.setFixedWidth(40)
+            checkbox.setFixedHeight(40)
+            checkbox.setStyleSheet("border: 2px solid #abacae;margin: 5px;padding: 5px;")
+            checkbox.stateChanged.connect(lambda: self.checkbox_state_changed(bool(checkbox.checkState()), current_index))
+            self.gridLayout.addWidget(checkbox, current_index, len(row))
+        
+        return row[0]
     
     def setSizeDistribution(self, sizes: list[int]):
-        if len(sizes) > self.gridLayout.columnCount():
-            print("More sizes than necessary")
+        for index,size in enumerate(sizes):
+            self.gridLayout.setColumnStretch(index, size)
+    
+    def checkbox_state_changed(self, checkbox_state: bool, row: int):
+        if checkbox_state:
+            if row not in self.selectedBoxes:
+                self.selectedBoxes.append(row)
         else:
-            for index,size in enumerate(sizes):
-                self.gridLayout.setColumnStretch(index, size)
+            if row in self.selectedBoxes:
+                self.selectedBoxes.remove(row)

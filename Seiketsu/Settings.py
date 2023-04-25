@@ -1,4 +1,15 @@
 from PyQt5.QtCore import QSettings
+import os
+
+user_profile = os.path.expandvars("%userprofile%")
+system_drive = user_profile[:3]
+default_folders = [
+    f"{user_profile}Downloads",
+    f"{user_profile}OneDrive\Documents",
+    f"{user_profile}Desktop",
+    f"{user_profile}Videos",
+    f"{user_profile}OneDrive\Pictures"
+]
 
 def init():
     settings = QSettings("JYOH Software Solutions", "Seiketsu")
@@ -17,8 +28,19 @@ def init():
     if "interval" not in settings.allKeys():
         settings.setValue("interval", "1 week")
     
+    if "folders" not in settings.allKeys():
+        settings.setValue("folders", default_folders)
+    
     return settings
 
+def getScannableFolders():
+    settings = QSettings("JYOH Software Solutions", "Seiketsu")
+    return settings.value("folders", defaultValue=default_folders)
+
+def setScannableFolders(folders: list[str]):
+    settings = QSettings("JYOH Software Solutions", "Seiketsu")
+    settings.setValue("folders", folders)
+    
 def getAutomatedInterval():
     settings = QSettings("JYOH Software Solutions", "Seiketsu")
     return settings.value("interval", defaultValue="1 week", type=str)
