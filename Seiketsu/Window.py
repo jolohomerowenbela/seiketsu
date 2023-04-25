@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
         
-        self.title_bar = TitleBar(self.drop_shadow_frame, has_settings=True, has_minimize=True, has_maximize=True)
+        self.title_bar = TitleBar(self.drop_shadow_frame, has_settings=True, has_minimize=True, has_maximize=True, label="Seiketsu")
         
         self.stackedWidget = QCustomStackedWidget(self.drop_shadow_frame)
         self.stackedWidget.setTransitionDirection(Qt.Horizontal)

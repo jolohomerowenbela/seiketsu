@@ -27,5 +27,6 @@ class InspirationPane(QWidget):
             border: 2px solid #666666;
             padding-top: 10px;
             padding-bottom: 10px;
+            qproperty-alignment: AlignCenter;
         }
         """
