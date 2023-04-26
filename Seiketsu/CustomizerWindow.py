@@ -2,7 +2,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import Seiketsu.Titlebar
-import Seiketsu.Settings
+import Seiketsu.SettingsAPI
 from Seiketsu.CustomScrollableTable import *
 
 class CustomizerWindow(QDialog):
@@ -50,7 +50,7 @@ class CustomizerWindow(QDialog):
         self.table.setFixedHeight(420)
         self.table.setHeaders(["Folders"])
         
-        self.folderpaths = list(Seiketsu.Settings.getScannableFolders())
+        self.folderpaths = list(Seiketsu.SettingsAPI.getScannableFolders())
         for folder in self.folderpaths:
             self.table.append([folder])
             
@@ -129,13 +129,13 @@ class CustomizerWindow(QDialog):
                 self.table.selectedBoxes.remove(row)
                 for col in range(self.table.gridLayout.columnCount()):
                     self.table.gridLayout.itemAtPosition(row, col).widget().setParent(None)
-                Seiketsu.Settings.setScannableFolders(self.folderpaths)
+                Seiketsu.SettingsAPI.setScannableFolders(self.folderpaths)
     
     def add_to_folders(self):
         folderpath = QFileDialog.getExistingDirectory(self, 'Select Folder')
         if folderpath not in self.folderpaths:
             self.folderpaths.append(folderpath)
             self.table.append([folderpath])
-            Seiketsu.Settings.setScannableFolders(self.folderpaths)
+            Seiketsu.SettingsAPI.setScannableFolders(self.folderpaths)
         else:
             print("Already here")
