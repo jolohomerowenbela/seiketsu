@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from Seiketsu.SettingWidget import SettingWidget
 import Seiketsu.Titlebar
-import Seiketsu.Settings
+import Seiketsu.SettingsAPI
 
 class SettingPopup(QDialog):
     def __init__(self, parent, clicker_button):
@@ -117,24 +117,24 @@ class SettingPopup(QDialog):
         self.dragPos = event.globalPos()
     
     def methods_enabled(self, item: QStandardItem):
-        methods = list(Seiketsu.Settings.getMethods())
+        methods = list(Seiketsu.SettingsAPI.getMethods())
         if item.checkState():
             if item.text() not in methods:
                 methods.insert(item.index().row(), item.text())
-                Seiketsu.Settings.setMethods(methods)
+                Seiketsu.SettingsAPI.setMethods(methods)
         else:
             if item.text() in methods:
                 methods.remove(item.text())
-                Seiketsu.Settings.setMethods(methods)
+                Seiketsu.SettingsAPI.setMethods(methods)
     
     def rename_obscure_changed(self, value):
-        Seiketsu.Settings.setRenameObscure(bool(value))
+        Seiketsu.SettingsAPI.setRenameObscure(bool(value))
     
     def automated_interval_changed(self, interval):
-        Seiketsu.Settings.setAutomatedInterval(interval)
+        Seiketsu.SettingsAPI.setAutomatedInterval(interval)
 
     def automatic_changed(self, value):
-        Seiketsu.Settings.setAutomatic(bool(value))
+        Seiketsu.SettingsAPI.setAutomatic(bool(value))
         if bool(value):
             self.setting_auto.combobox.setEnabled(True)
             self.setting_auto.combo_title.setStyleSheet("background: none; color: #ffffff;")
@@ -145,10 +145,10 @@ class SettingPopup(QDialog):
             self.setting_auto.combobox.setStyleSheet("color: rgba(255, 255, 255, 127);border: 1px solid #666666;border-radius: 0px;")
     
     def quote_disable_changed(self, value):
-        Seiketsu.Settings.setQuotesDisabled(bool(value))
+        Seiketsu.SettingsAPI.setQuotesDisabled(bool(value))
 
     def setStartupConditions(self):
-        if Seiketsu.Settings.getAutomatic():
+        if Seiketsu.SettingsAPI.getAutomatic():
             self.setting_auto.checkbox.setChecked(True)
         else:
             self.setting_auto.checkbox.setChecked(False)
@@ -156,24 +156,24 @@ class SettingPopup(QDialog):
             self.setting_auto.combo_title.setStyleSheet("background: none;color: rgba(255, 255, 255, 127)")
             self.setting_auto.combobox.setStyleSheet("color: rgba(255, 255, 255, 127);border: 1px solid #666666;border-radius: 0px;")
         
-        if Seiketsu.Settings.getRenameObscure():
+        if Seiketsu.SettingsAPI.getRenameObscure():
             self.setting_func.checkbox.setChecked(True)
         else:
             self.setting_func.checkbox.setChecked(False)
 
-        if Seiketsu.Settings.getQuotesDisabled():
+        if Seiketsu.SettingsAPI.getQuotesDisabled():
             self.setting_add.checkbox.setChecked(True)
         else:
             self.setting_add.checkbox.setChecked(False)
         
-        methods = Seiketsu.Settings.getMethods()
+        methods = Seiketsu.SettingsAPI.getMethods()
         for index in range(self.setting_func.combobox.model().rowCount()):
             item = self.setting_func.combobox.model().item(index, 0)
             if item.text() in methods:
                 item.setCheckState(True)
                 item.setSelectable(False)
         
-        interval = Seiketsu.Settings.getAutomatedInterval()
+        interval = Seiketsu.SettingsAPI.getAutomatedInterval()
         for index in range(self.setting_auto.combobox.model().rowCount()):
             item = self.setting_auto.combobox.model().item(index, 0)
             if item.text() == interval:
