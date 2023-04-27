@@ -41,6 +41,7 @@ class InspirationPane(QWidget):
         self.label = QLabel(self, text=random.choice(self.quotes))
         self.label.setFont(font)
         self.label.setObjectName("inspirational")
+        self.label.setWordWrap(True)
 
         self.simpleLayout = QVBoxLayout(self)
         self.simpleLayout.addWidget(self.label)

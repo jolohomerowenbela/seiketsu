@@ -53,38 +53,6 @@ class OutputView(QFrame):
         #     border-radius: 5px;
         # }""")
         
-        font.setPointSize(10)
-        
-        self.table_layout = QHBoxLayout(self.table)
-        
-        icon = QIcon("./resource/save.svg")
-
-        self.save_button = QPushButton(self.table)
-        self.save_button.setIcon(icon)
-        self.save_button.setIconSize(QSize(24, 24))
-        self.save_button.setStyleSheet("""
-        QPushButton {
-            background-color: rgba(155, 219, 77, 20);
-            border-radius: 10px;
-            border: 2px solid rgb(155, 219, 77);
-            margin-right: 20px;
-        }
-        QPushButton:hover {
-            background-color: rgba(155, 219, 77, 50%);
-            border-radius: 10px;
-            border: 2px solid rgb(155, 219, 77);
-            margin-right: 20px;
-        }""")
-        self.save_button.setEnabled(False)
-        self.save_button.clicked.connect(self.save_to_file)
-
-        self.table_layout.addWidget(self.save_button, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
-
-        self.current_file = QLabel(self, text="")
-        self.current_file.setWordWrap(True)
-        self.current_file.setFont(font)
-        self.current_file.setStyleSheet("background:none;color: #ffffff;qproperty-alignment: AlignCenter;")
-        
         self.progressbar = QProgressBar(self)
         self.progressbar.setStyleSheet("""
             QProgressBar {
@@ -100,11 +68,44 @@ class OutputView(QFrame):
         self.progressbar.setFont(font)
         self.progressbar.setMaximum(100)
         
-        self.table
+        font.setPointSize(10)
         
-        self.vert.addWidget(self.table, stretch=90)
-        self.vert.addWidget(self.current_file, stretch=5)
-        self.vert.addWidget(self.progressbar, stretch=5)
+        self.extra_placeholder = QWidget(self)
+        self.extra_placeholder.setStyleSheet("background:none;")
+        self.extra_layout = QHBoxLayout(self.extra_placeholder)
+
+        self.current_file = QLabel(self.extra_placeholder, text="")
+        self.current_file.setWordWrap(True)
+        self.current_file.setFont(font)
+        self.current_file.setStyleSheet("background:none;color: #ffffff;qproperty-alignment: AlignCenter;")
+        
+        icon = QIcon("./resource/save.svg")
+
+        self.save_button = QPushButton(self.extra_placeholder)
+        self.save_button.setIcon(icon)
+        self.save_button.setIconSize(QSize(24, 24))
+        self.save_button.setStyleSheet("""
+        QPushButton {
+            background-color: rgba(155, 219, 77, 20);
+            border-radius: 10px;
+            border: 2px solid rgb(155, 219, 77);
+            padding: 12px;
+        }
+        QPushButton:hover {
+            background-color: rgba(155, 219, 77, 50%);
+            border-radius: 10px;
+            border: 2px solid rgb(155, 219, 77);
+            padding: 12px;
+        }""")
+        self.save_button.setEnabled(False)
+        self.save_button.clicked.connect(self.save_to_file)
+
+        self.extra_layout.addWidget(self.current_file, stretch=95)
+        self.extra_layout.addWidget(self.save_button, stretch=5)
+        
+        self.vert.addWidget(self.table, stretch=75)
+        self.vert.addWidget(self.extra_placeholder, stretch=15)
+        self.vert.addWidget(self.progressbar, stretch=10)
     
     def save_to_file(self):
         filename = QFileDialog.getSaveFileName()[0]
