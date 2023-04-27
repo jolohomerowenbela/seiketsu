@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import *
 from Seiketsu.InspirationPane import *
 from Seiketsu.CustomizerWindow import *
 from Seiketsu.Organizer import Organizer
-import Seiketsu.Settings
+import Seiketsu.SettingsAPI
 
 class HomePage(QFrame):
     def __init__(self, parent, main):
@@ -99,6 +99,8 @@ class HomePage(QFrame):
         
         font.setPointSize(10)
 
+        self.organizer = Organizer(self.window.outputview)
+        
         self.show_output_button = QPushButton(self, text="Show Output")
         self.show_output_button.setObjectName("ShowOutputButton")
         self.show_output_button.setFont(font)
@@ -126,9 +128,8 @@ class HomePage(QFrame):
         self.show_output_button.clicked.connect(self.show_outputview)
     
     def organize_files(self):
-        self.organizer = Organizer()
         self.show_outputview()
-        self.organizer.organize(Seiketsu.Settings.getScannableFolders(), self.window.outputview)
+        self.organizer.organize(Seiketsu.SettingsAPI.getScannableFolders())
         
     def show_outputview(self):
         pixmap = QPixmap(".\\resource\\return.svg")

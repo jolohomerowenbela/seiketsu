@@ -17,6 +17,7 @@ class OutputView(QFrame):
         self.vert = QVBoxLayout(self)
         self.vert.setContentsMargins(0, 0, 0, 0)
         self.vert.setSpacing(0)
+        
         self.table = QTextEdit(self)
         self.table.setStyleSheet("padding: 20px;color: #ffffff;")
         self.table.setMinimumSize(800, 500)
@@ -51,7 +52,32 @@ class OutputView(QFrame):
         #     border-radius: 5px;
         # }""")
         
-        self.vert.addWidget(self.table, stretch=1)
+        font.setPointSize(10)
+
+        self.current_file = QLabel(self, text="")
+        self.current_file.setWordWrap(True)
+        self.current_file.setFont(font)
+        self.current_file.setStyleSheet("background:none;color: #ffffff;qproperty-alignment: AlignCenter;")
+        
+        self.progressbar = QProgressBar(self)
+        # self.progressbar.setTextVisible(False)
+        self.progressbar.setStyleSheet("""
+            QProgressBar {
+                color: #ffffff;
+                text-align:center;
+            }
+            
+            QProgressBar:chunk {
+                border-radius: 5px;
+                background-color: #a56de2;
+            }
+        """)
+        self.progressbar.setFont(font)
+        self.progressbar.setMaximum(100)
+        
+        self.vert.addWidget(self.table, stretch=90)
+        self.vert.addWidget(self.current_file, stretch=5)
+        self.vert.addWidget(self.progressbar, stretch=5)
         
     def style(self):
         return """

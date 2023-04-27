@@ -5,7 +5,7 @@ from Seiketsu.Titlebar import TitleBar
 from Seiketsu.HomePage import HomePage
 from Seiketsu.OutputView import OutputView
 from Custom_Widgets.Widgets import QCustomStackedWidget
-import Seiketsu.Settings
+import Seiketsu.SettingsAPI
 
 GLOBAL_STATE = 0
 
@@ -16,7 +16,7 @@ class MainWindow(QMainWindow):
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.resize(1024, 768)
         
-        setting = Seiketsu.Settings.init()
+        setting = Seiketsu.SettingsAPI.init()
         
         # Window drop shadow effect
         self.shadow = QGraphicsDropShadowEffect(self)
@@ -51,8 +51,8 @@ class MainWindow(QMainWindow):
         self.stackedWidget.setTransitionEasingCurve(QEasingCurve.Linear)
         self.stackedWidget.setSlideTransition(True)
         
-        self.home_page = HomePage(self.stackedWidget, self)
         self.outputview = OutputView(self.stackedWidget)
+        self.home_page = HomePage(self.stackedWidget, self)
         
         self.stackedWidget.addWidget(self.home_page)
         self.stackedWidget.addWidget(self.outputview)
