@@ -128,8 +128,9 @@ class CustomizerWindow(QDialog):
     
     def change_output_folder(self):
         output = QFileDialog.getExistingDirectory(self, 'Select Output Folder')
-        self.output_button.setText(output)
-        Seiketsu.SettingsAPI.setDefaultOutputFolder(output)
+        if output != "":
+            self.output_button.setText(output)
+            Seiketsu.SettingsAPI.setDefaultOutputFolder(output)
     
     def moveWindow(self, event):
         # IF LEFT CLICK MOVE WINDOW
