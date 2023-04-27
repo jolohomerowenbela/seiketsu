@@ -3,6 +3,7 @@ import time
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from Seiketsu.OutputView import *
+from Seiketsu.Methods.FilenameAnalysis import *
 
 class FileScanner(QThread):
     file_scanned = pyqtSignal(str, str)
@@ -19,17 +20,17 @@ class FileScanner(QThread):
         f"{system_drive}ProgramData",
         f"{system_drive}Recovery",
         f"{system_drive}System Volume Information",
-        f"{system_drive}Users\\All Users",
-        f"{system_drive}Users\\Default",
-        f"{system_drive}Users\\Default User",
+        f"{system_drive}Users/All Users",
+        f"{system_drive}Users/Default",
+        f"{system_drive}Users/Default User",
         f"{system_drive}Windows",
-        f"{user_profile}\\AppData",
-        f"{user_profile}\\Application Data",
-        f"{user_profile}\\Cookies",
-        f"{user_profile}\\Local Settings",
-        f"{user_profile}\\Documents\\My Music",
-        f"{user_profile}\\Documents\\My Pictures",
-        f"{user_profile}\\Documents\\My Videos"
+        f"{user_profile}/AppData",
+        f"{user_profile}/Application Data",
+        f"{user_profile}/Cookies",
+        f"{user_profile}/Local Settings",
+        f"{user_profile}/Documents/My Music",
+        f"{user_profile}/Documents/My Pictures",
+        f"{user_profile}/Documents/My Videos"
     ]
 
     def __init__(self, folders):
@@ -37,6 +38,7 @@ class FileScanner(QThread):
         self.folders = folders
         self.total_size = 0
         self.current_size = 0
+        self.filename_analyzer = FilenameAnalyzer()
 
     def run(self):
         for folder in self.folders:
@@ -48,15 +50,18 @@ class FileScanner(QThread):
         self.scan_finished.emit()
     
     def enumerate_sortable_files(self, drive, func):
-        for path in os.listdir(drive):
-            file_path = os.path.join(drive, path)
-            try:
-                if os.path.isfile(file_path) and file_path not in self.invalid_files and path[0] != ".":
-                    func(file_path)
-                elif os.path.isdir(file_path) and file_path not in self.invalid_files and path[0] != ".":
-                    self.enumerate_sortable_files(file_path, func)
-            except PermissionError:
-                pass
+        try:
+            for path in os.listdir(drive):
+                file_path = os.path.join(drive, path)
+                try:
+                    if os.path.isfile(file_path) and file_path not in self.invalid_files and path[0] != ".":
+                        func(file_path)
+                    elif os.path.isdir(file_path) and file_path not in self.invalid_files and path[0] != ".":
+                        self.enumerate_sortable_files(file_path, func)
+                except PermissionError:
+                    pass
+        except (FileNotFoundError, FileExistsError):
+            pass
     
     def get_size(self, file_path):
         size = int(self.total_size)
@@ -71,7 +76,10 @@ class FileScanner(QThread):
         self.file_scanned.emit(file_path, category)
     
     def categorize(self, path):
-        return path
+        category = ""
+        if categ := self.filename_analyzer.scan(path):
+            category = categ[1]
+        return os.path.join(self.user_profile, category, os.path.basename(path))
 
     def move_file(self, path, category):
         pass

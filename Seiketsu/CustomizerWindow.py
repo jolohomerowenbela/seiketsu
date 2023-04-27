@@ -9,7 +9,7 @@ class CustomizerWindow(QDialog):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
-        self.resize(800, 600)
+        self.resize(800, 700)
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         
@@ -38,12 +38,29 @@ class CustomizerWindow(QDialog):
         self.title_bar = Seiketsu.Titlebar.TitleBar(self.drop_shadow_frame, has_settings=False, has_minimize=False, has_maximize=False, label="Folders to scan")
         
         font = QFont()
-        font.setFamily("Inter ExtraBold")
-        font.setPointSize(22)
+        font.setFamily("Inter Regular")
+        font.setPointSize(10)
         
         self.content = QWidget(self.drop_shadow_frame)
         self.content.setStyleSheet("background-color: #333333;margin-left: 10px;margin-bottom: 10px;margin-right: 10px;")
         self.content_layout = QVBoxLayout(self.content)
+        
+        default_output = Seiketsu.SettingsAPI.getDefaultOutputFolder()
+
+        self.output_folder_section = QWidget(self.content)
+        self.output_layout = QHBoxLayout(self.output_folder_section)
+        
+        self.output_label = QLabel(self.output_folder_section, text = "Output Folder:")
+        self.output_label.setStyleSheet("background: none; color: #ffffff;")
+        self.output_label.setFont(font)
+        self.output_button = QPushButton(self.output_folder_section, text = default_output)
+        self.output_button.setStyleSheet("background-color: #666666; color: #ffffff;border-radius: 10px;")
+        self.output_button.setMinimumHeight(50)
+        self.output_button.setFont(font)
+        self.output_button.clicked.connect(self.change_output_folder)
+        
+        self.output_layout.addWidget(self.output_label, 10)
+        self.output_layout.addWidget(self.output_button, 90)
         
         self.table = CustomScrollableTable(self.content, has_checkbox=True)
         self.table.gridLayout.setSpacing(0)
@@ -53,10 +70,6 @@ class CustomizerWindow(QDialog):
         self.folderpaths = list(Seiketsu.SettingsAPI.getScannableFolders())
         for folder in self.folderpaths:
             self.table.append([folder])
-            
-        font = QFont()
-        font.setFamily("Inter Regular")
-        font.setPointSize(10)
         
         self.add_button = QPushButton(parent=self.content, text="Add Folder")
         self.add_button.setFixedHeight(50)
@@ -96,6 +109,7 @@ class CustomizerWindow(QDialog):
         self.buttons_layout.addWidget(self.add_button)
         self.buttons_layout.addWidget(self.remove_button)
         
+        self.content_layout.addWidget(self.output_folder_section)
         self.content_layout.addWidget(self.table)
         self.content_layout.addWidget(self.buttons)   
         
@@ -111,6 +125,11 @@ class CustomizerWindow(QDialog):
         self.title_bar.mouseMoveEvent = self.moveWindow
         
         self.title_bar.btn_close.clicked.connect(lambda: self.close())
+    
+    def change_output_folder(self):
+        output = QFileDialog.getExistingDirectory(self, 'Select Output Folder')
+        self.output_button.setText(output)
+        Seiketsu.SettingsAPI.setDefaultOutputFolder(output)
     
     def moveWindow(self, event):
         # IF LEFT CLICK MOVE WINDOW

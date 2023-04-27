@@ -51,16 +51,19 @@ class OutputView(QFrame):
         #     subcontrol-origin: margin;
         #     border-radius: 5px;
         # }""")
+        
+        font.setPointSize(10)
+
         self.current_file = QLabel(self, text="")
+        self.current_file.setWordWrap(True)
         self.current_file.setFont(font)
-        self.current_file.setStyleSheet("background:none;color: #ffffff;text-align: center;")
+        self.current_file.setStyleSheet("background:none;color: #ffffff;qproperty-alignment: AlignCenter;")
         
         self.progressbar = QProgressBar(self)
+        # self.progressbar.setTextVisible(False)
         self.progressbar.setStyleSheet("""
             QProgressBar {
-                padding: 20px;
                 color: #ffffff;
-                margin-top: 50px;
                 text-align:center;
             }
             

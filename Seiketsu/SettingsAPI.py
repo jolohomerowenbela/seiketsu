@@ -12,6 +12,11 @@ default_folders = [
 ]
 
 def init():
+    default_folder = f"{user_profile}\Organized"
+    
+    if not os.path.exists(default_folder):
+        os.mkdir(default_folder)
+    
     settings = QSettings("JYOH Software Solutions", "Seiketsu")
     if "automatic" not in settings.allKeys():
         settings.setValue("automatic", False)
@@ -30,6 +35,9 @@ def init():
     
     if "folders" not in settings.allKeys():
         settings.setValue("folders", default_folders)
+    
+    if "default_output" not in settings.allKeys():
+        settings.setValue("default_output", f"{user_profile}\Organized")
     
     return settings
 
@@ -80,3 +88,12 @@ def getQuotesDisabled():
 def setQuotesDisabled(boolean: bool):
     settings = QSettings("JYOH Software Solutions", "Seiketsu")
     settings.setValue("disable_quotes", boolean)
+
+def getDefaultOutputFolder():
+    settings = QSettings("JYOH Software Solutions", "Seiketsu")
+    return settings.value("default_output", defaultValue=f"{user_profile}\Organized", type=str)
+
+def setDefaultOutputFolder(output: str):
+    settings = QSettings("JYOH Software Solutions", "Seiketsu")
+    settings.setValue("default_output", output)
+
