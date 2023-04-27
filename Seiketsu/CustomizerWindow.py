@@ -152,9 +152,7 @@ class CustomizerWindow(QDialog):
     
     def add_to_folders(self):
         folderpath = QFileDialog.getExistingDirectory(self, 'Select Folder')
-        if folderpath not in self.folderpaths:
+        if folderpath not in self.folderpaths and folderpath != "":
             self.folderpaths.append(folderpath)
             self.table.append([folderpath])
             Seiketsu.SettingsAPI.setScannableFolders(self.folderpaths)
-        else:
-            print("Already here")

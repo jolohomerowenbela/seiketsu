@@ -1,13 +1,11 @@
 import os
-import time
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
 from Seiketsu.OutputView import *
 from Seiketsu.Methods.FilenameAnalysis import *
 
 class FileScanner(QThread):
     file_scanned = pyqtSignal(str, str)
-    scan_finished = pyqtSignal()
+    scan_finished = pyqtSignal(str)
     progress = pyqtSignal(str, str, str)
     user_profile = os.path.expandvars("%userprofile%")
     system_drive = user_profile[:3]
@@ -38,6 +36,7 @@ class FileScanner(QThread):
         self.folders = folders
         self.total_size = 0
         self.current_size = 0
+        self.file_count = 0
         self.filename_analyzer = FilenameAnalyzer()
 
     def run(self):
@@ -47,7 +46,7 @@ class FileScanner(QThread):
         for folder in self.folders:
             self.enumerate_sortable_files(folder, self.organize)
 
-        self.scan_finished.emit()
+        self.scan_finished.emit(str(self.file_count))
     
     def enumerate_sortable_files(self, drive, func):
         try:
@@ -67,6 +66,7 @@ class FileScanner(QThread):
         size = int(self.total_size)
         size += os.path.getsize(file_path)
         self.total_size = str(size)
+        self.file_count += 1
     
     def organize(self, file_path):
         self.current_size += os.path.getsize(file_path)
@@ -92,6 +92,7 @@ class Organizer():
         self.scanner = FileScanner(folders)
         self.scanner.file_scanned.connect(self.appediendo)
         self.scanner.progress.connect(self.printprog)
+        self.scanner.scan_finished.connect(self.scan_finished)
         self.scanner.start()
         
     def appediendo(self, file_path, category):
@@ -100,3 +101,8 @@ class Organizer():
     def printprog(self, progress, max, current_file):
         self.outputview.progressbar.setValue(int((int(progress)/ int(max)) * 100))
         self.outputview.current_file.setText(current_file)
+    
+    def scan_finished(self, file_count):
+        self.outputview.progressbar.setFormat(f"Done! {file_count} files scanned.")
+        self.outputview.current_file.setText("")
+        self.outputview.save_button.setEnabled(True)

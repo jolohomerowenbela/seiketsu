@@ -57,7 +57,7 @@ class CustomScrollableTable(QFrame):
     def setHeaders(self, headers: list[str]):
         font = QFont()
         font.setFamily("Inter SemiBold")
-        font.setPointSize(12)
+        font.setPointSize(17)
         
         for index,header in enumerate(headers):
             label = QLabel(header)
