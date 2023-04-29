@@ -17,8 +17,8 @@ class DocumentAnalysis():
                 print(self.analyze_pdf(path))
             elif "vnd.openxmlformats-officedocument.wordprocessingml.document" in mime:
                 print(self.analyze_docx(path))
-            elif "vnd.openxmlformats-officedocument.presentationml.presentation" in mime:
-                print(self.analyze_presentation(path))
+            # elif "vnd.openxmlformats-officedocument.presentationml.presentation" in mime:
+            #     print(self.analyze_presentation(path))
             if "vnd.openxmlformats-officedocument.spreadsheetml.sheet" in mime:
                 print(self.analyze_spreadsheet(path))
             else:
@@ -48,11 +48,11 @@ class DocumentAnalysis():
                 print(path)
                 return word
     
-    def analyze_presentation(self, path):
-        ppt = Presentation(path)
-        for slide in ppt.slides:
-            for shapes in slide.shapes:
-                for word in Seiketsu.Methods.Patterns.keywords():
-                    if word in shapes.text:
-                        print(path)
-                        return word
+    # def analyze_presentation(self, path):
+    #     ppt = Presentation(path)
+    #     for slide in ppt.slides:
+    #         for shapes in slide.shapes:
+    #             for word in Seiketsu.Methods.Patterns.keywords():
+    #                 if word in shapes.text:
+    #                     print(path)
+    #                     return word

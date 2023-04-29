@@ -1,3 +1,10 @@
+import Seiketsu.Methods.Patterns
+
 class FilenameAnalyzer():
     def scan(self, path):
-        return True, "Physics"
+        for keyword in Seiketsu.Methods.Patterns.keywords():
+            if keyword in path.lower():
+                print(keyword)
+                return
+
+        
