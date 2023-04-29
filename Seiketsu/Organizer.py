@@ -2,6 +2,7 @@ import os
 from PyQt5.QtCore import *
 from Seiketsu.OutputView import *
 from Seiketsu.Methods.FilenameAnalysis import *
+from Seiketsu.Methods.DocumentAnalysis import *
 
 class FileScanner(QThread):
     file_scanned = pyqtSignal(str, str)
@@ -38,6 +39,7 @@ class FileScanner(QThread):
         self.current_size = 0
         self.file_count = 0
         self.filename_analyzer = FilenameAnalyzer()
+        self.document_analyzer = DocumentAnalysis()
 
     def run(self):
         for folder in self.folders:
@@ -77,8 +79,8 @@ class FileScanner(QThread):
     
     def categorize(self, path):
         category = ""
-        if categ := self.filename_analyzer.scan(path):
-            category = categ[1]
+        if categ := self.document_analyzer.scan(path):
+            pass
         return os.path.join(self.user_profile, category, os.path.basename(path))
 
     def move_file(self, path, category):
