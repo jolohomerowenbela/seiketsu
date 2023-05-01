@@ -4,7 +4,4 @@ class FilenameAnalyzer():
     def scan(self, path):
         for keyword in Seiketsu.Methods.Patterns.keywords():
             if keyword in path.lower():
-                print(keyword)
-                return
-
-        
+                return True, keyword

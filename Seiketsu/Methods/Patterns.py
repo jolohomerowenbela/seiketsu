@@ -20,7 +20,8 @@ def keywords():
         #patterns
         "p6", "art app", "artapp", "integral", "integ",
         "tcw", "contempo", "sts", "compprog", "comp prog",
-        "pe", "diffcal", "difcal", "calculus", "genchem",
+        "diffcal", "difcal", "calculus", "genchem",
         "gen chem", "chem", "chemistry", "mmw", "purcomm",
-        "purcom", "ite", "uts", "rph", "GEd"
+        "purcom", "rph", "cpe", "math", "sci", "batangas state university",
+        "experiment", "datasheet", "manual"
     ]

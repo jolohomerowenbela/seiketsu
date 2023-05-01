@@ -48,22 +48,6 @@ def getScannableFolders():
 def setScannableFolders(folders: list[str]):
     settings = QSettings("JYOH Software Solutions", "Seiketsu")
     settings.setValue("folders", folders)
-    
-def getAutomatedInterval():
-    settings = QSettings("JYOH Software Solutions", "Seiketsu")
-    return settings.value("interval", defaultValue="1 week", type=str)
-
-def setAutomatedInterval(interval: str):
-    settings = QSettings("JYOH Software Solutions", "Seiketsu")
-    settings.setValue("interval", interval)
-
-def getAutomatic():
-    settings = QSettings("JYOH Software Solutions", "Seiketsu")
-    return settings.value("automatic", defaultValue=False, type=bool)
-
-def setAutomatic(boolean: bool):
-    settings = QSettings("JYOH Software Solutions", "Seiketsu")
-    settings.setValue("automatic", boolean)
 
 def getMethods():
     settings = QSettings("JYOH Software Solutions", "Seiketsu")

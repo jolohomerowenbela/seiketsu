@@ -8,6 +8,7 @@ class TitleBar(QFrame):
         super().__init__(parent)
         self.settings = None
 
+        # Hardcode the style of the titlebar
         self.setMaximumHeight(50)
         self.setStyleSheet(self.style())
         self.setFrameShape(QFrame.NoFrame)
@@ -33,6 +34,7 @@ class TitleBar(QFrame):
         
         pixmap = QPixmap(".\\resource\\icon.svg")
         
+        # The button disguising as an icon, but being functional in the 2nd page as return button
         self.icon = QPushButton(self.frame_title)
         sizePolicy.setHeightForWidth(self.icon.sizePolicy().hasHeightForWidth())
         self.icon.setSizePolicy(sizePolicy)
@@ -61,12 +63,14 @@ class TitleBar(QFrame):
         self.horizontalLayout_2.addWidget(self.label_title)
         self.horizontalLayout.addWidget(self.frame_title)
 
+        # The container for all interactable buttons in the titlebar
         self.frame_btns = QFrame(self)
         self.frame_btns.setMaximumWidth(140)
         self.frame_btns.setFrameShape(QFrame.StyledPanel)
         self.frame_btns.setFrameShadow(QFrame.Raised)
         self.frame_btns.setObjectName("frame_btns")
 
+        # Close button
         self.btn_close = QPushButton(self.frame_btns)
         self.btn_close.setMinimumSize(QSize(16, 16))
         self.btn_close.setMaximumSize(QSize(17, 17))
@@ -74,6 +78,8 @@ class TitleBar(QFrame):
         
         self.button_box = QHBoxLayout(self.frame_btns)
         
+        # If the user specifies that the titlebar has settings button, minimize and maximize button,
+        # It was only then created
         if has_settings == True:
             self.btn_settings = QPushButton(self.frame_btns)
             self.btn_settings.setIcon(QIcon(".\\resource\\settings.svg"))
@@ -99,6 +105,7 @@ class TitleBar(QFrame):
         self.horizontalLayout.addWidget(self.frame_btns)
         
     def show_settings(self):
+        # Show a popup when settings button is clicked.
         if self.settings is None:
             self.settings = SettingPopup(self, self.btn_settings)
             self.settings.show()

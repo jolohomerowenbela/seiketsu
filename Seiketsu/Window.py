@@ -43,14 +43,17 @@ class MainWindow(QMainWindow):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
         
+        # The custom title bar for the app
         self.title_bar = TitleBar(self.drop_shadow_frame, has_settings=True, has_minimize=True, has_maximize=True, label="Seiketsu")
         
+        # The widget that allows the app to have multiple pages animated
         self.stackedWidget = QCustomStackedWidget(self.drop_shadow_frame)
         self.stackedWidget.setTransitionDirection(Qt.Horizontal)
         self.stackedWidget.setTransitionSpeed(250)
         self.stackedWidget.setTransitionEasingCurve(QEasingCurve.Linear)
         self.stackedWidget.setSlideTransition(True)
         
+        # The two pages of the app. One is the homepage, the other is output view
         self.outputview = OutputView(self.stackedWidget)
         self.home_page = HomePage(self.stackedWidget, self)
         
@@ -63,6 +66,7 @@ class MainWindow(QMainWindow):
         self.drop_shadow_layout.addWidget(self.drop_shadow_frame)
         self.setCentralWidget(self.centralwidget)
         
+        # handle user input
         self.title_bar.btn_maximize.clicked.connect(lambda: self.maximize_restore())
         self.title_bar.btn_minimize.clicked.connect(lambda: self.showMinimized())
         self.title_bar.btn_close.clicked.connect(lambda: self.close())
@@ -71,6 +75,7 @@ class MainWindow(QMainWindow):
         self.title_bar.icon.clicked.connect(self.return_to_homepage)
     
     def return_to_homepage(self):
+        # 1 means that the paging widget is currently showing the 2nd item.
         if self.stackedWidget.currentIndex() == 1:
             pixmap = QPixmap(".\\resource\\icon.svg")
             font = self.title_bar.label_title.font()

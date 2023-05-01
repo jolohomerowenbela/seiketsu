@@ -1,4 +1,6 @@
+import shutil
 import os
+import Seiketsu.SettingsAPI
 from PyQt5.QtCore import *
 from Seiketsu.OutputView import *
 from Seiketsu.Methods.FilenameAnalysis import *
@@ -73,18 +75,36 @@ class FileScanner(QThread):
     def organize(self, file_path):
         self.current_size += os.path.getsize(file_path)
         self.progress.emit(str(self.current_size), self.total_size, file_path)
-        category = self.categorize(file_path)
-        self.move_file(file_path, category)
-        self.file_scanned.emit(file_path, category)
+        categorized_path = self.categorize(file_path)
+        if categorized_path is not None:
+            self.move_file(file_path, categorized_path)
+
+        self.file_scanned.emit(file_path, categorized_path)
     
     def categorize(self, path):
         category = ""
-        if categ := self.document_analyzer.scan(path):
-            pass
-        return os.path.join(self.user_profile, category, os.path.basename(path))
+        basename = os.path.basename(path)
+        methods = Seiketsu.SettingsAPI.getMethods()
+        if categ := self.filename_analyzer.scan(path):
+            if "Filename Analysis" in methods:
+                category = categ[1]
+        elif categ := self.document_analyzer.scan(path):
+            if "Document Analysis" in methods:
+                category = categ[1]
+                basename += category
+        else:
+            return None
+        
+        default_folder = Seiketsu.SettingsAPI.getDefaultOutputFolder()
+        return os.path.join(default_folder, category, basename)
 
-    def move_file(self, path, category):
-        pass
+    def move_file(self, path, categorized):
+        folder = categorized.replace(os.path.basename(categorized), "")
+        print(categorized)
+        if not os.path.exists(folder):
+            os.mkdir(folder)
+        
+        shutil.move(path, categorized)
 
 class Organizer():
     def __init__(self, outputview: OutputView) -> None:
