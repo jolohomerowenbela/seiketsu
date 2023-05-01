@@ -1,11 +1,35 @@
 all_quotes = [
     "You're braver than you believe, and stronger than you seem, and smarter than you think.",
-    "Be the change that you wish to see in the world.",
     "In the end, it's not the years in your life that count. It's the life in your years.",
     "Success is not final, failure is not fatal: it is the courage to continue that counts.",
     "Believe you can and you're halfway there.",
     "Happiness is not something ready made. It comes from your own actions.",
-    "If you can't fly then run, if you can't run then walk, if you can't walk then crawl, but whatever you do you have to keep moving forward."
+    "If you can't fly then run, if you can't run then walk, if you can't walk then crawl, but whatever you do you have to keep moving forward.",
+    "Believe you can and you're halfway there.\t\t- Theodore Roosevelt",
+    "Success is not final, failure is not fatal: it is the courage to continue that counts.  - Winston Churchill",  
+    "I can't change the direction of the wind, but I can adjust my sails to always reach my destination.  - Jimmy Dean",
+    "Don't watch the clock; do what it does. Keep going.  - Sam Levenson", 
+    "Believe in yourself and all that you are. Know that there is something inside you that is greater than any obstacle.  - Christian D. Larson",
+    "Success is not how high you have climbed, but how you make a positive difference to the world.  - Roy T. Bennett",
+    "The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle.  - Steve Jobs",
+    "Don't let yesterday take up too much of today.  - Will Rogers",
+    "The future belongs to those who believe in the beauty of their dreams.  - Eleanor Roosevelt",
+    "It does not matter how slowly you go as long as you do not stop.  - Confucius", 
+    "You have within you right now, everything you need to deal with whatever the world can throw at you.  - Brian Tracy", 
+    "The greatest glory in living lies not in never falling, but in rising every time we fall.  - Nelson Mandela" ,
+    "Be the change you wish to see in the world.  - Mahatma Gandhi",
+    "Happiness is not something ready-made. It comes from your own actions.  - Dalai Lama",
+    "The only thing we have to fear is fear itself.  - Franklin D. Roosevelt",
+    "If you want to live a happy life, tie it to a goal, not to people or things.  - Albert Einstein",
+    "Success is stumbling from failure to failure with no loss of enthusiasm.  - Winston Churchill",
+    "Everything you can imagine is real.  - Pablo Picasso",
+    "The best way to predict your future is to create it.  - Abraham Lincoln",
+    "Happiness is not the absence of problems, it's the ability to deal with them.  - Steve Maraboli",
+    "The greatest wealth is to live content with little.  - Plato",
+    "Don't let yesterday take up too much of today.  - Will Rogers",
+    "The only true wisdom is in knowing you know nothing.  - Socrates",
+    "The two most important days in your life are the day you are born and the day you find out why.  - Mark Twain",
+    "The only person you are destined to become is the person you decide to be.  - Ralph Waldo Emerson"
 ]
 
 def get_local_quotes():
