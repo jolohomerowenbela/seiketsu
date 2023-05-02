@@ -112,15 +112,15 @@ class Organizer():
   
     def organize(self, folders):
         self.scanner = FileScanner(folders)
-        self.scanner.file_scanned.connect(self.appediendo)
-        self.scanner.progress.connect(self.printprog)
+        self.scanner.file_scanned.connect(self.append_to_updated_view)
+        self.scanner.progress.connect(self.show_progress)
         self.scanner.scan_finished.connect(self.scan_finished)
         self.scanner.start()
         
-    def appediendo(self, file_path, category):
+    def append_to_updated_view(self, file_path, category):
         self.outputview.table.append(f"{file_path} -->> {category}")
     
-    def printprog(self, progress, max, current_file):
+    def show_progress(self, progress, max, current_file):
         self.outputview.progressbar.setValue(int((int(progress)/ int(max)) * 100))
         self.outputview.current_file.setText(current_file)
     
