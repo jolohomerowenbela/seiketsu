@@ -10,6 +10,7 @@ class FileScanner(QThread):
     file_scanned = pyqtSignal(str, str)
     scan_finished = pyqtSignal(str)
     progress = pyqtSignal(str, str, str)
+    no_files = pyqtSignal(bool)
     user_profile = os.path.expandvars("%userprofile%")
     system_drive = user_profile[:3]
     invalid_files = [
@@ -46,6 +47,10 @@ class FileScanner(QThread):
     def run(self):
         for folder in self.folders:
             self.enumerate_sortable_files(folder, self.get_size)
+        
+        if self.total_size == 0:
+            self.no_files.emit(True)
+            return
 
         for folder in self.folders:
             self.enumerate_sortable_files(folder, self.organize)
@@ -92,8 +97,12 @@ class FileScanner(QThread):
             if "Document Analysis" in methods:
                 category = categ[1]
                 basename += category
+                
+                if Seiketsu.SettingsAPI.getRenameObscure():
+                    basename = f"{category} - {basename}"
         else:
             return None
+        
         
         default_folder = Seiketsu.SettingsAPI.getDefaultOutputFolder()
         return os.path.join(default_folder, category, basename)
@@ -115,6 +124,7 @@ class Organizer():
         self.scanner.file_scanned.connect(self.append_to_updated_view)
         self.scanner.progress.connect(self.show_progress)
         self.scanner.scan_finished.connect(self.scan_finished)
+        self.scanner.no_files.connect(self.no_files_found)
         self.scanner.start()
         
     def append_to_updated_view(self, file_path, category):
@@ -128,3 +138,7 @@ class Organizer():
         self.outputview.progressbar.setFormat(f"Done! {file_count} files scanned.")
         self.outputview.current_file.setText("")
         self.outputview.save_button.setEnabled(True)
+    
+    def no_files_found(self, no_files: bool):
+        if no_files:
+            self.outputview.table.setText("No files found!")
